@@ -75,6 +75,37 @@
             overflow: hidden;
         }
 
+        .timer-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .timer {
+            font-size: 2em;
+            font-weight: bold;
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+
+        .timer.warning {
+            color: #f39c12;
+        }
+
+        .timer.critical {
+            color: #e74c3c;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
         .progress-fill {
             background: linear-gradient(90deg, #3498db, #2980b9);
             height: 100%;
@@ -412,10 +443,17 @@
                 <ul style="text-align: left; max-width: 600px; margin: 0 auto;">
                     <li><strong>Questions:</strong> 50 multiple choice questions</li>
                     <li><strong>Domains:</strong> 10 comprehensive security areas</li>
-                    <li><strong>Duration:</strong> 60-90 minutes (self-paced)</li>
+                    <li><strong>Duration:</strong> 90 minutes (timed assessment)</li>
                     <li><strong>Scoring:</strong> Immediate feedback with explanations</li>
                     <li><strong>Difficulty:</strong> Beginner to Advanced levels</li>
                 </ul>
+            </div>
+
+            <!-- Timer Container -->
+            <div class="timer-container">
+                <h3>⏱️ Time Remaining</h3>
+                <div class="timer" id="timer">90:00</div>
+                <p>Assessment will auto-submit when time expires</p>
             </div>
             
             <div class="progress-container">
@@ -1174,11 +1212,54 @@
         let userAnswers = {};
         let sectionScores = {};
         let showingJustification = false;
+        let timeLeft = 90 * 60; // 90 minutes in seconds
+        let timerInterval;
+        let quizStarted = false;
 
         function initializeQuiz() {
             renderCurrentQuestion();
             updateProgress();
             updateNavigation();
+            startTimer();
+        }
+
+        function startTimer() {
+            if (!quizStarted) {
+                quizStarted = true;
+                timerInterval = setInterval(updateTimer, 1000);
+            }
+        }
+
+        function updateTimer() {
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert('Time\'s up! The assessment will now be submitted automatically.');
+                submitQuiz();
+                return;
+            }
+
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const timerElement = document.getElementById('timer');
+            
+            timerElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Change color based on time remaining
+            if (timeLeft <= 5 * 60) { // Last 5 minutes
+                timerElement.className = 'timer critical';
+            } else if (timeLeft <= 15 * 60) { // Last 15 minutes
+                timerElement.className = 'timer warning';
+            } else {
+                timerElement.className = 'timer';
+            }
+            
+            timeLeft--;
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
         }
 
         function renderCurrentQuestion() {
@@ -1363,6 +1444,7 @@
         }
 
         function submitQuiz() {
+            stopTimer();
             calculateSectionScores();
             showScorePage();
         }
@@ -1479,6 +1561,9 @@
             userAnswers = {};
             sectionScores = {};
             showingJustification = false;
+            timeLeft = 90 * 60; // Reset timer to 90 minutes
+            quizStarted = false;
+            stopTimer();
             
             // Show quiz content
             document.querySelector('.quiz-header').style.display = 'block';
