@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS SAA-C03 Mock Exam - 50 Questions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #ff7b00 0%, #ff8f00 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .quiz-header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .quiz-header h1 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 2.5em;
+        }
+
+        .exam-info {
+            background: #fff3e0;
+            border-left: 4px solid #ff7b00;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .exam-info h3 {
+            color: #e65100;
+            margin-bottom: 10px;
+        }
+
+        .timer {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #d84315;
+            margin: 15px 0;
+        }
+
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            background: #ecf0f1;
+            height: 10px;
+            border-radius: 5px;
+            flex: 1;
+            margin: 0 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #ff7b00, #ff8f00);
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .question-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question-type {
+            background: #ff7b00;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .question {
+            margin-bottom: 25px;
+        }
+
+        .question h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            line-height: 1.4;
+        }
+
+        .question-number {
+            background: #2c3e50;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        .options {
+            margin-left: 20px;
+        }
+
+        .option {
+            margin: 12px 0;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            border-color: #ff7b00;
+            background: #fff3e0;
+        }
+
+        .option.selected {
+            border-color: #ff7b00;
+            background: #ffe0b2;
+        }
+
+        .option.correct {
+            border-color: #4caf50;
+            background: #e8f5e9;
+        }
+
+        .option.incorrect {
+            border-color: #f44336;
+            background: #ffebee;
+        }
+
+        .option input {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+
+        .option label {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .justification {
+            background: #f8f9fa;
+            border-left: 4px solid #ff7b00;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .justification.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .justification h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .navigation {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #ff7b00, #ff8f00);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .score-page {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            display: none;
+        }
+
+        .score-page.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            font-weight: bold;
+            color: white;
+            position: relative;
+        }
+
+        .score-excellent {
+            background: linear-gradient(135deg, #4caf50, #388e3c);
+        }
+
+        .score-good {
+            background: linear-gradient(135deg, #2196f3, #1976d2);
+        }
+
+        .score-average {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+        }
+
+        .score-poor {
+            background: linear-gradient(135deg, #f44336, #d32f2f);
+        }
+
+        .aws-score {
+            background: #232f3e;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .score-details {
+            margin: 30px 0;
+        }
+
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .score-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #ff7b00;
+        }
+
+        .timer-warning {
+            color: #f44336;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .home-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .home-link:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .quiz-header h1 {
+                font-size: 2em;
+            }
+            
+            .question-card, .quiz-header {
+                padding: 20px;
+            }
+
+            .home-link {
+                position: relative;
+                top: auto;
+                left: auto;
+                display: block;
+                text-align: center;
+                margin: 20px auto;
+                width: fit-content;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="home-link">← Back to Home</a>
+    
+    <div class="container">
+        <!-- Quiz Header -->
+        <div class="quiz-header">
+            <h1>AWS SAA-C03 Mock Exam</h1>
+            <p>Practice test with 50 questions (Single and Multiple Choice)</p>
+            
+            <div class="exam-info">
+                <h3>📋 Exam Instructions</h3>
+                <ul style="text-align: left; max-width: 600px; margin: 0 auto;">
+                    <li><strong>Duration:</strong> 130 minutes (2h 10min)</li>
+                    <li><strong>Questions:</strong> 50 total (mix of single and multiple choice)</li>
+                    <li><strong>Scoring:</strong> Each question = 1 point</li>
+                    <li><strong>Multiple Choice:</strong> Must select ALL correct answers to get the point</li>
+                    <li><strong>Passing Score:</strong> ~720/1000 (estimated ~36+ correct answers)</li>
+                </ul>
+            </div>
+
+            <div class="timer" id="timer">130:00</div>
+            
+            <div class="progress-container">
+                <span id="progressText">Question 1 of 50</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                <span id="timeRemaining">130:00</span>
+            </div>
+        </div>
+
+        <!-- Questions will be inserted here -->
+        <div id="questionsContainer"></div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" disabled>Previous</button>
+            <button class="btn" id="nextBtn" onclick="nextQuestion()">Next</button>
+            <button class="btn" id="submitBtn" onclick="submitQuiz()" style="display: none;">Submit Exam</button>
+            <button class="btn btn-danger" onclick="endExam()" style="margin-left: 20px;">End Exam</button>
+        </div>
+
+        <!-- Score Page -->
+        <div class="score-page" id="scorePage">
+            <h1>Exam Complete!</h1>
+            <div class="score-circle" id="scoreCircle">
+                <span id="scorePercentage">0%</span>
+            </div>
+            <div class="aws-score">
+                <h3>Estimated AWS Score</h3>
+                <div style="font-size: 2em; margin: 10px 0;" id="awsScore">000</div>
+                <p>Score ≈ 100 + 18 × (correct answers)</p>
+            </div>
+            <div class="score-details">
+                <h2 id="scoreTitle">Your Performance</h2>
+                <p id="scoreDescription">You've completed the AWS SAA-C03 Mock Exam</p>
+            </div>
+            <div class="score-breakdown" id="scoreBreakdown"></div>
+            <button class="btn" onclick="restartQuiz()">Retake Exam</button>
+            <button class="btn btn-secondary" onclick="window.location.href='index.html'">Back to Home</button>
+        </div>
+    </div>
+
+    <script>
+        // Quiz data with all 50 SAA-C03 questions
+        const quizData = [
+            {
+                id: 1,
+                type: "single",
+                question: "Une application web hébergée sur EC2 dans un VPC privé doit accéder à Internet uniquement pour les mises à jour du système. Quelle solution respecte le principe de sécurité minimal sans exposer les instances ?",
+                options: [
+                    "Attribuer des adresses IP publiques aux instances.",
+                    "Placer une NAT Gateway dans un sous-réseau public et configurer route pour le sous-réseau privé.",
+                    "Utiliser un Internet Gateway attaché au VPC et une route directe depuis le sous-réseau privé.",
+                    "Monter un VPN depuis chaque instance vers Internet."
+                ],
+                correct: [1],
+                explanation: "NAT Gateway dans sous-réseau public pour permettre sorties sans IP publiques. Cette solution permet aux instances privées d'accéder à Internet pour les mises à jour tout en maintenant leur sécurité."
+            },
+            {
+                id: 2,
+                type: "multiple",
+                question: "Concernant Amazon S3, lesquelles sont vraies ? (2 bonnes réponses)",
+                options: [
+                    "S3 garantit la consistance forte pour les mises à jour d'objets existants.",
+                    "S3 supporte des notifications d'événements vers Lambda, SNS et SQS.",
+                    "S3 Intelligent-Tiering déplace automatiquement des objets sans coût d'accès initial.",
+                    "S3 Object Lock permet d'imposer l'immutabilité des objets pour conformité."
+                ],
+                correct: [1, 3],
+                explanation: "S3 notifications vers Lambda/SNS/SQS et Object Lock pour immutabilité. S3 fournit une consistance forte pour les nouveaux objets, et Intelligent-Tiering a des coûts de monitoring."
+            },
+            {
+                id: 3,
+                type: "single",
+                question: "Un service doit en théorie maintenir une latence <10 ms pour les lectures très fréquentes. Quelle option de cache AWS est la plus adaptée ?",
+                options: [
+                    "Amazon ElastiCache (Redis)",
+                    "Amazon S3 Standard",
+                    "DynamoDB sans cache",
+                    "RDS Read Replica"
+                ],
+                correct: [0],
+                explanation: "ElastiCache Redis : cache en mémoire pour latences <10 ms. C'est la seule solution capable de fournir des latences aussi faibles."
+            },
+            {
+                id: 4,
+                type: "multiple",
+                question: "Pour gérer les secrets (mot de passe base de données) avec rotation automatique et audit, quelles solutions AWS utiliser ? (2 bonnes réponses)",
+                options: [
+                    "AWS Secrets Manager",
+                    "AWS KMS seul",
+                    "AWS Systems Manager Parameter Store (Standard)",
+                    "IAM Roles avec variables d'environnement (sans stockage)"
+                ],
+                correct: [0],
+                explanation: "Secrets Manager avec rotation automatique. KMS seul ne gère pas la rotation automatisée des secrets ; Parameter Store Standard n'a pas de rotation automatique intégrée."
+            },
+            {
+                id: 5,
+                type: "single",
+                question: "Une application serverless avec Lambda connait des 'cold starts' en Java ; quelle mesure réduit le plus efficacement ces cold starts ?",
+                options: [
+                    "Réduire mémoire de la Lambda",
+                    "Activer Provisioned Concurrency",
+                    "Déployer la Lambda dans un VPC privé",
+                    "Mettre le code en TypeScript"
+                ],
+                correct: [1],
+                explanation: "Provisioned Concurrency garde des environnements chauds et réduit les cold starts en maintenant des instances Lambda prêtes."
+            },
+            {
+                id: 6,
+                type: "multiple",
+                question: "Concernant DynamoDB, lesquelles sont vraies ? (2 bonnes réponses)",
+                options: [
+                    "Un item peut faire jusqu'à 400 KB.",
+                    "DynamoDB supporte nativement les jointures SQL entre tables.",
+                    "Global Tables permet la réplication multi-région.",
+                    "DynamoDB Streams peut déclencher Lambda pour traitement en continu."
+                ],
+                correct: [0, 2, 3],
+                explanation: "DynamoDB : limite 400KB par item, Global Tables pour multi-région, Streams pour Lambda. Pas de jointures SQL natives."
+            },
+            {
+                id: 7,
+                type: "single",
+                question: "Quelle solution est la meilleure pour acheminer du trafic entrant HTTP vers plusieurs services en fonction du chemin de l'URL (ex : /api/* -> backend microservice, / -> site statique) ?",
+                options: [
+                    "Network Load Balancer (NLB)",
+                    "Application Load Balancer (ALB)",
+                    "Classic Load Balancer (ELB)",
+                    "Route 53 uniquement"
+                ],
+                correct: [1],
+                explanation: "ALB pour routage couche 7 (path/host). L'ALB peut router basé sur les chemins d'URL, headers, etc."
+            },
+            {
+                id: 8,
+                type: "multiple",
+                question: "Pour sécuriser l'accès à une API exposée via API Gateway, lesquelles sont de bonnes pratiques ? (2 bonnes réponses)",
+                options: [
+                    "Utiliser IAM roles / policies pour les clients authentifiés.",
+                    "Autoriser tout le monde et compter sur CloudFront pour filtrer.",
+                    "Activer AWS WAF pour bloquer patterns malveillants.",
+                    "Déployer l'API uniquement dans une VPC privée sans internet."
+                ],
+                correct: [0, 2],
+                explanation: "IAM pour authentification et WAF pour filtrage des attaques. Déployer uniquement dans un VPC privé empêcherait l'accès public."
+            },
+            {
+                id: 9,
+                type: "single",
+                question: "Tu dois concevoir une architecture multi-région active-passive pour une base de données relationnelle avec RTO faible ; quelle solution est la plus adaptée ?",
+                options: [
+                    "RDS Multi-AZ dans la région principale seulement",
+                    "Read Replica cross-region promotable ou réplication gérée + runbook DR",
+                    "Sauvegardes automatiques (snapshots) stockées dans S3 et restauration en cas de panne",
+                    "DynamoDB Global Tables"
+                ],
+                correct: [1],
+                explanation: "Read Replica cross-region promotable + runbook DR pour reprise régionale. Multi-AZ ne couvre que les pannes d'AZ, pas régionales."
+            },
+            {
+                id: 10,
+                type: "multiple",
+                question: "Pour minimiser le risque de partitions 'hot' sur DynamoDB, quelles approches utiliser ? (2 bonnes réponses)",
+                options: [
+                    "Utiliser une partition key avec forte cardinalité et uniformément distribuée.",
+                    "Utiliser la même valeur de clé pour toutes les écritures afin de simplifier la logique.",
+                    "Employer des suffixes ou sharding logique dans la clé de partition quand nécessaire.",
+                    "Augmenter la consistance forte pour réduire latence."
+                ],
+                correct: [0, 2],
+                explanation: "Bonne distribution de partition key et sharding logique évitent les hot partitions. Utiliser la même clé crée justement des hot partitions."
+            },
+            {
+                id: 11,
+                type: "single",
+                question: "Tu dois partager un filesystem POSIX entre plusieurs instances EC2 dans plusieurs AZ, lequel choisir ?",
+                options: [
+                    "Amazon EBS",
+                    "Amazon EFS (mode régional)",
+                    "S3",
+                    "FSx for Lustre seulement"
+                ],
+                correct: [1],
+                explanation: "EFS (NFS) pour multiple instances across AZs. EBS ne peut être attaché qu'à une instance à la fois."
+            },
+            {
+                id: 12,
+                type: "multiple",
+                question: "Concernant VPC Endpoints (Gateway et Interface), lesquelles sont vraies ? (2 bonnes réponses)",
+                options: [
+                    "Gateway endpoints sont pris en charge pour S3 et DynamoDB.",
+                    "Interface endpoints créent des ENI avec IP privées dans tes sous-réseaux.",
+                    "Les VPC endpoints impliquent que le trafic vers S3 traverse toujours Internet.",
+                    "PrivateLink (via Interface endpoint) permet l'accès privé à des services partenaires."
+                ],
+                correct: [0, 1, 3],
+                explanation: "Gateway endpoints pour S3/DynamoDB, Interface endpoints créent des ENI privées, PrivateLink = Interface endpoint."
+            },
+            {
+                id: 13,
+                type: "single",
+                question: "Pour transférer 200 TB d'un data center vers AWS rapidement et hors ligne, quelle solution AWS choisir ?",
+                options: [
+                    "AWS Direct Connect uniquement",
+                    "AWS Snowball / Snowball Edge",
+                    "S3 multipart upload via connexion Internet publique",
+                    "AWS DataSync en temps réel"
+                ],
+                correct: [1],
+                explanation: "Snowball / Snowball Edge pour transferts offline importants. 200TB serait trop long via Internet."
+            },
+            {
+                id: 14,
+                type: "multiple",
+                question: "Pour surveillance et audit des appels API dans un compte AWS, quelles solutions utiliser ? (2 bonnes réponses)",
+                options: [
+                    "AWS CloudTrail pour enregistrer les appels API.",
+                    "Amazon CloudWatch Logs pour stocker les fichiers S3.",
+                    "AWS Config pour surveiller les changements de configuration des ressources.",
+                    "AWS Inspector pour lister les appels API."
+                ],
+                correct: [0, 2],
+                explanation: "CloudTrail pour audit des API calls et AWS Config pour changements de configuration. Inspector est pour les vulnérabilités."
+            },
+            {
+                id: 15,
+                type: "single",
+                question: "Quelle option de stockage est la plus adaptée pour des snapshots rapides et peu coûteux d'un volume bloc attaché à EC2 ?",
+                options: [
+                    "S3 Standard",
+                    "EBS Snapshots (stockées sur S3 en backend)",
+                    "EFS",
+                    "Stockage local ephemeral (instance store)"
+                ],
+                correct: [1],
+                explanation: "EBS Snapshots (stockés sur S3 en backend) pour snapshot de volumes bloc. C'est la méthode native et optimisée."
+            },
+            {
+                id: 16,
+                type: "multiple",
+                question: "Pour réduire les coûts de compute sur un workload batch tolérant les interruptions, qu'utilises-tu ? (2 bonnes réponses)",
+                options: [
+                    "Réserver uniquement des instances On-Demand.",
+                    "Spot Instances combinées avec Auto Scaling ou Batch.",
+                    "Reserved Instances (RI) 5 ans pour tous les jobs.",
+                    "AWS Batch ou Auto Scaling Group avec stratégie mixte On-Demand + Spot."
+                ],
+                correct: [1, 3],
+                explanation: "Spot Instances + AWS Batch/ASG mixte pour tolérance interruption et optimisation des coûts."
+            },
+            {
+                id: 17,
+                type: "single",
+                question: "Pour déployer en production une application conteneurisée sans gérer des serveurs EC2, quelle option serverless conteneur utilises-tu ?",
+                options: [
+                    "Amazon ECS sur EC2",
+                    "Amazon EKS sur EC2",
+                    "AWS Fargate (via ECS/EKS)",
+                    "Lambda (fonction uniquement)"
+                ],
+                correct: [2],
+                explanation: "AWS Fargate (serverless containers) via ECS ou EKS. Fargate élimine la gestion des serveurs."
+            },
+            {
+                id: 18,
+                type: "multiple",
+                question: "Concernant CloudFront, lesquelles sont vraies ? (2 bonnes réponses)",
+                options: [
+                    "CloudFront peut utiliser des signed URLs pour restreindre l'accès à des objets S3.",
+                    "CloudFront ne supporte pas la mise en cache des réponses dynamique.",
+                    "Origin Shield peut être activé pour réduire la charge sur l'origine.",
+                    "CloudFront ne peut pas être associé à un WAF."
+                ],
+                correct: [0, 2],
+                explanation: "CloudFront signed URLs et Origin Shield disponibles. CloudFront peut mettre en cache du contenu dynamique et être associé à WAF."
+            },
+            {
+                id: 19,
+                type: "single",
+                question: "Quelle stratégie Route 53 utilises-tu pour diriger les utilisateurs vers la région la plus réactive (latence la plus faible) ?",
+                options: [
+                    "Simple routing",
+                    "Latency-based routing",
+                    "Weighted routing",
+                    "Failover routing"
+                ],
+                correct: [1],
+                explanation: "Latency-based routing dirige automatiquement vers la région avec la latence la plus faible."
+            },
+            {
+                id: 20,
+                type: "multiple",
+                question: "Pour assurer la haute disponibilité d'un service web derrière un ALB, quelles pratiques appliquer ? (2 bonnes réponses)",
+                options: [
+                    "Déployer les instances dans une seule AZ pour réduire coût.",
+                    "Déployer instances dans au moins deux AZ et configurer Target Groups sains.",
+                    "Créer une NAT Gateway unique dans une AZ pour tout le VPC.",
+                    "Configurer des health checks sur l'ALB et automatiser le remplacement via Auto Scaling."
+                ],
+                correct: [1, 3],
+                explanation: "Multi-AZ deployment + health checks & Auto Scaling pour haute disponibilité."
+            },
+            {
+                id: 21,
+                type: "single",
+                question: "Tu veux chiffrer des données au repos avec gestion centralisée et rotation automatique des clés ; quel service utiliser pour gérer les clés ?",
+                options: [
+                    "AWS KMS (Customer-managed CMK)",
+                    "IAM user secret",
+                    "S3 SSE-AES256 (sans KMS)",
+                    "Stocker clés dans un S3 non chiffré"
+                ],
+                correct: [0],
+                explanation: "AWS KMS (CMK) pour gestion centralisée et rotation automatique des clés de chiffrement."
+            },
+            {
+                id: 22,
+                type: "multiple",
+                question: "Quelle(s) fonctionnalité(s) AWS permettent la récupération point-in-time (PITR) pour DynamoDB et RDS respectivement ? (2 bonnes réponses)",
+                options: [
+                    "DynamoDB PITR (Point-in-Time Recovery)",
+                    "RDS Automated Backups and Point-in-Time restore (for supported engines)",
+                    "EBS Snapshots PITR natif",
+                    "S3 Versioning pour RDS PITR"
+                ],
+                correct: [0, 1],
+                explanation: "DynamoDB PITR et RDS automated backups avec point-in-time restore pour les moteurs supportés."
+            },
+            {
+                id: 23,
+                type: "single",
+                question: "Pour déployer et gérer l'infrastructure déclarativement via templates, quel service AWS utilises-tu ?",
+                options: [
+                    "AWS CloudFormation",
+                    "AWS CLI uniquement",
+                    "Terraform uniquement (non AWS)",
+                    "Manuellement depuis la console"
+                ],
+                correct: [0],
+                explanation: "CloudFormation pour Infrastructure as Code déclaratif avec templates JSON/YAML."
+            },
+            {
+                id: 24,
+                type: "multiple",
+                question: "Concernant les options d'achat EC2, lesquelles conviennent pour des charges stables, prévisibles et à long terme ? (2 bonnes réponses)",
+                options: [
+                    "Reserved Instances (RI) ou Savings Plans (Compute)",
+                    "Spot Instances uniquement",
+                    "On-Demand Instances si engagement 3 ans requis",
+                    "Savings Plans pour réduire coût en utilisant flexibilité compute"
+                ],
+                correct: [0, 3],
+                explanation: "Reserved Instances ou Savings Plans pour charges stables avec engagements à long terme."
+            },
+            {
+                id: 25,
+                type: "single",
+                question: "Quel service est conçu pour l'orchestration de workflows serverless avec états, retries, and branching ?",
+                options: [
+                    "AWS Step Functions",
+                    "Amazon EventBridge",
+                    "Amazon SQS",
+                    "AWS Lambda uniquement"
+                ],
+                correct: [0],
+                explanation: "Step Functions pour orchestration de workflows stateful avec gestion d'état, retry logic et branchement conditionnel."
+            },
+            {
+                id: 26,
+                type: "multiple",
+                question: "Pour réduire la latence réseau globale d'un service global, quelles options AWS sont adaptées ? (2 bonnes réponses)",
+                options: [
+                    "Amazon CloudFront pour contenu statique & dynamique edge caching",
+                    "AWS Global Accelerator pour optimiser le routage réseau vers points d'entrée AWS",
+                    "Déployer une seule instance régionale et utiliser Route 53 simple routing",
+                    "Forcer tout le trafic via Internet public sans optimisations"
+                ],
+                correct: [0, 1],
+                explanation: "CloudFront pour edge caching et Global Accelerator pour optimisation réseau global."
+            },
+            {
+                id: 27,
+                type: "single",
+                question: "Quel service permet d'exécuter des requêtes SQL serverless directement sur des données stockées dans S3 ?",
+                options: [
+                    "Amazon Athena",
+                    "Amazon Redshift (sans Spectrum)",
+                    "Amazon RDS",
+                    "Amazon EMR uniquement"
+                ],
+                correct: [0],
+                explanation: "Athena pour requêtes SQL serverless sur données S3 avec pay-per-query."
+            },
+            {
+                id: 28,
+                type: "multiple",
+                question: "Pour assurer la conformité et surveiller la configuration des ressources AWS au fil du temps, on utilise : (2 bonnes réponses)",
+                options: [
+                    "AWS Config",
+                    "Amazon CloudWatch Alarms",
+                    "AWS CloudTrail",
+                    "AWS Secrets Manager"
+                ],
+                correct: [0, 2],
+                explanation: "AWS Config pour surveillance de configuration et CloudTrail pour audit des actions."
+            },
+            {
+                id: 29,
+                type: "single",
+                question: "Pour créer automatiquement des AMI pipeline-ready et immuables dans CI/CD, quel outil est souvent utilisé ?",
+                options: [
+                    "Packer",
+                    "AWS Systems Manager Session Manager",
+                    "EC2 User Data en production (manuel)",
+                    "Elastic Beanstalk uniquement"
+                ],
+                correct: [0],
+                explanation: "Packer pour créer des AMI immuables dans des pipelines CI/CD avec configuration reproductible."
+            },
+            {
+                id: 30,
+                type: "multiple",
+                question: "Concernant SQS et SNS, lesquelles sont vraies ? (2 bonnes réponses)",
+                options: [
+                    "SNS est un service pub/sub (fan-out) ; SQS est une file de messages.",
+                    "SQS FIFO garantit ordering et exactly-once processing (dans les limites).",
+                    "SNS stocke les messages durablement pour consommation future par SQS.",
+                    "SQS Standard garantit ordering strict."
+                ],
+                correct: [0, 1],
+                explanation: "SNS = pub/sub, SQS = queue. SQS FIFO garantit l'ordre et exactly-once processing. SQS Standard ne garantit pas l'ordre strict."
+            },
+            {
+                id: 31,
+                type: "single",
+                question: "Une application nécessite un cache en mémoire distribuée, persistant et avec support des structures complexes (hashes, sorted sets). Quel service ?",
+                options: [
+                    "Amazon ElastiCache (Redis)",
+                    "Amazon ElastiCache (Memcached)",
+                    "DynamoDB",
+                    "S3"
+                ],
+                correct: [0],
+                explanation: "ElastiCache Redis pour structures de données complexes et persistance optionnelle."
+            },
+            {
+                id: 32,
+                type: "multiple",
+                question: "Pour protéger un site web contre injections et patterns d'attaque applicative, quelles solutions déploies-tu ? (2 bonnes réponses)",
+                options: [
+                    "AWS WAF avec règles gérées et personnalisées",
+                    "Route 53 health checks uniquement",
+                    "Protection DDoS via AWS Shield (Standard incluse, Advanced si besoin)",
+                    "IAM policies sur les buckets S3 publics"
+                ],
+                correct: [0, 2],
+                explanation: "AWS WAF pour protection application layer et Shield pour protection DDoS."
+            },
+            {
+                id: 33,
+                type: "single",
+                question: "Tu dois permettre à plusieurs comptes AWS dans une organisation d'assumer un rôle central pour déployer des ressources ; quelle approche ?",
+                options: [
+                    "Utiliser IAM Role avec trust policy permettant l'assumeRole depuis comptes spécifiques (cross-account IAM role).",
+                    "Copier l'utilisateur root entre comptes.",
+                    "Créer un seul utilisateur IAM partageable.",
+                    "Mettre les clés d'accès dans S3 et les partager."
+                ],
+                correct: [0],
+                explanation: "Cross-account IAM role avec trust policy pour permettre l'assume role depuis des comptes spécifiques."
+            },
+            {
+                id: 34,
+                type: "multiple",
+                question: "Pour faire du streaming de données en temps réel à haut débit et offrir un traitement aux consommateurs, quelles options AWS ? (2 bonnes réponses)",
+                options: [
+                    "Amazon Kinesis Data Streams",
+                    "Amazon MSK (Managed Streaming for Kafka)",
+                    "Amazon S3 (direct)",
+                    "Amazon Redshift (direct)"
+                ],
+                correct: [0, 1],
+                explanation: "Kinesis Data Streams et MSK (Kafka managé) pour streaming temps réel haute performance."
+            },
+            {
+                id: 35,
+                type: "single",
+                question: "Un service doit être accessible uniquement depuis ton VPC sans utiliser Internet. Laquelle est la meilleure option pour y accéder de façon privée ?",
+                options: [
+                    "VPC Endpoint (Interface ou Gateway selon service)",
+                    "Internet Gateway + ACLs restrictives",
+                    "Attribuer IP publiques et Security Groups restrictifs",
+                    "Utiliser Route 53 public records"
+                ],
+                correct: [0],
+                explanation: "VPC Endpoint (Interface ou Gateway) pour accès privé aux services AWS sans Internet."
+            },
+            {
+                id: 36,
+                type: "multiple",
+                question: "Concernant RDS Multi-AZ et Read Replicas, lesquelles sont vraies ? (2 bonnes réponses)",
+                options: [
+                    "RDS Multi-AZ fournit basculement automatique pour haute disponibilité.",
+                    "Read Replicas fournissent basculement automatique pour écriture.",
+                    "Vous pouvez promouvoir une Read Replica pour la rendre master si besoin.",
+                    "Multi-AZ réplique de façon asynchrone cross-region par défaut."
+                ],
+                correct: [0, 2],
+                explanation: "Multi-AZ = basculement automatique, Read Replicas peuvent être promues manuellement. Read Replicas ne font pas de basculement automatique."
+            },
+            {
+                id: 37,
+                type: "single",
+                question: "Which storage option is best when you need extremely low latency block storage for a single EC2 instance?",
+                options: [
+                    "EBS io2 Block Express (provisioned IOPS)",
+                    "S3 Glacier",
+                    "EFS One Zone",
+                    "DynamoDB"
+                ],
+                correct: [0],
+                explanation: "EBS io2 Block Express avec IOPS provisionnées pour latence extrêmement faible sur stockage bloc."
+            },
+            {
+                id: 38,
+                type: "multiple",
+                question: "Pour une stratégie de sauvegarde centralisée couvrant EBS, RDS, EFS et DynamoDB, quelle solution AWS est la plus adaptée ? (2 bonnes réponses)",
+                options: [
+                    "AWS Backup (plans de sauvegarde centralisés)",
+                    "CloudFormation templates pour snapshots manuels",
+                    "Lifecycle policies S3 uniquement",
+                    "Utiliser les fonctionnalités natives (RDS automated backups, EBS snapshots) orchestrées par AWS Backup si besoin"
+                ],
+                correct: [0, 3],
+                explanation: "AWS Backup centralise les sauvegardes et peut orchestrer les fonctionnalités natives des services."
+            },
+            {
+                id: 39,
+                type: "single",
+                question: "Tu veux surveiller l'usage CPU, latence et créer des alarmes ; quel service utilises-tu principalement ?",
+                options: [
+                    "Amazon CloudWatch (Metrics & Alarms)",
+                    "AWS CloudTrail",
+                    "AWS Config",
+                    "AWS Trusted Advisor"
+                ],
+                correct: [0],
+                explanation: "CloudWatch pour métriques, monitoring et alarmes sur performance et utilisation des ressources."
+            },
+            {
+                id: 40,
+                type: "multiple",
+                question: "Concernant CloudFormation Change Sets et Rollback, lesquelles sont vraies ? (2 bonnes réponses)",
+                options: [
+                    "Change Sets permettent visualiser les changements avant exécution.",
+                    "CloudFormation ne peut pas rollback automatiquement en cas d'échec.",
+                    "CloudFormation supporte exports/imports pour échanger des valeurs entre stacks.",
+                    "CloudFormation gère automatiquement l'exécution de scripts OS sur EC2 sans mécanisme additionnel."
+                ],
+                correct: [0, 2],
+                explanation: "Change Sets pour prévisualisation et exports/imports cross-stack. CloudFormation peut faire rollback automatique et nécessite cfn-init pour scripts OS."
+            },
+            {
+                id: 41,
+                type: "single",
+                question: "Pour réduire les coûts d'accès à la base de données pour de très nombreuses lectures, quelle architecture ?",
+                options: [
+                    "Placer ElastiCache en lecture frontale de la base de données (cache côté lecture).",
+                    "Multiplier les RDS primaires.",
+                    "Stocker tout en S3.",
+                    "Augmenter CPU des instances RDS seulement."
+                ],
+                correct: [0],
+                explanation: "ElastiCache devant la base de données pour cache de lecture et réduction de charge sur la DB."
+            },
+            {
+                id: 42,
+                type: "multiple",
+                question: "Pour tester en continu la disponibilité d'un endpoint web et déclencher remédiation automatisée, quelles solutions combiner ? (2 bonnes réponses)",
+                options: [
+                    "Route 53 Health Checks + Failover Routing",
+                    "CloudWatch Synthetics (canaries) + Alarms",
+                    "Use Route 53 latency routing only",
+                    "AWS Glue jobs"
+                ],
+                correct: [0, 1],
+                explanation: "Route 53 Health Checks et CloudWatch Synthetics pour monitoring continu avec actions automatisées."
+            },
+            {
+                id: 43,
+                type: "single",
+                question: "Tu dois déployer un cluster Kubernetes managé avec control plane AWS géré ; quel service utilises-tu ?",
+                options: [
+                    "Amazon EKS (managed)",
+                    "ECS Fargate",
+                    "EC2 ASG with kubeadm manually",
+                    "Elastic Beanstalk"
+                ],
+                correct: [0],
+                explanation: "Amazon EKS pour Kubernetes managé avec control plane géré par AWS."
+            },
+            {
+                id: 44,
+                type: "multiple",
+                question: "Concernant coût et optimisation, quelles pratiques sont recommandées ? (2 bonnes réponses)",
+                options: [
+                    "Activer Savings Plans ou Reserved Instances pour charges stables.",
+                    "Toujours utiliser On-Demand pour tout (c'est toujours optimal).",
+                    "Utiliser Cost Explorer pour rightsizing et rapport par tag.",
+                    "Laisser les ressources inutilisées en prod ; elles ne coûtent rien."
+                ],
+                correct: [0, 2],
+                explanation: "Savings Plans/RIs pour charges stables et Cost Explorer pour optimisation et rightsizing."
+            },
+            {
+                id: 45,
+                type: "single",
+                question: "Pour assurer que des fonctions Lambda accédant à des ressources RDS dans un VPC ont un accès réseau correct et performant, que dois-tu faire ?",
+                options: [
+                    "Place la Lambda dans le VPC et configurer Subnet + Security Group, et provisioned concurrency si cold start problématique.",
+                    "Toujours exécuter Lambda hors du VPC ; ça marche automatiquement.",
+                    "Donner IP publique à RDS.",
+                    "Mettre RDS dans S3."
+                ],
+                correct: [0],
+                explanation: "Placer Lambda dans le VPC avec configuration réseau appropriée et considérer Provisioned Concurrency pour les cold starts."
+            },
+            {
+                id: 46,
+                type: "multiple",
+                question: "Pour mettre en place la réplication multi-région d'objets S3 avec faible latence pour lecture globale, quelles options ? (2 bonnes réponses)",
+                options: [
+                    "S3 Cross-Region Replication (CRR)",
+                    "S3 Replication Time Control (RTC) pour SLA de réplication",
+                    "Configurer Route 53 geolocation routing vers S3 local sans réplication",
+                    "Utiliser S3 Transfer Acceleration pour réplication automatique"
+                ],
+                correct: [0, 1],
+                explanation: "S3 Cross-Region Replication avec Replication Time Control pour SLA de réplication faible latence."
+            },
+            {
+                id: 47,
+                type: "single",
+                question: "Pour capturer et analyser en quasi-temps réel les changements d'objets S3 ou de items DynamoDB afin de déclencher des traitements, quelle combinaison utilises-tu souvent ?",
+                options: [
+                    "S3 Events / DynamoDB Streams -> Lambda -> traitement",
+                    "CloudTrail -> Glue only",
+                    "CloudWatch Events -> direct DB modification",
+                    "RDS binlog -> CloudFront"
+                ],
+                correct: [0],
+                explanation: "S3 Events et DynamoDB Streams vers Lambda pour traitement en temps réel des changements."
+            },
+            {
+                id: 48,
+                type: "multiple",
+                question: "Pour détecter comportements suspects et menaces sur ton compte AWS (anomalies, API calls malveillants), quelles solutions utiliser ? (2 bonnes réponses)",
+                options: [
+                    "Amazon GuardDuty",
+                    "AWS Inspector (vulnérabilités hôtes)",
+                    "AWS Macie (detection données sensibles)",
+                    "AWS Backup (gestion des backups)"
+                ],
+                correct: [0, 1],
+                explanation: "GuardDuty pour détection de menaces et Inspector pour vulnérabilités. Macie est pour données sensibles, Backup pour sauvegardes."
+            },
+            {
+                id: 49,
+                type: "single",
+                question: "Pour héberger un site web statique avec coût minimal et intégration CloudFront, quelle solution ?",
+                options: [
+                    "S3 static website hosting + CloudFront distribution",
+                    "EC2 + Nginx + EBS volume",
+                    "RDS + ALB",
+                    "Lambda functions uniquement"
+                ],
+                correct: [0],
+                explanation: "S3 static website hosting avec CloudFront pour distribution globale à coût minimal."
+            },
+            {
+                id: 50,
+                type: "multiple",
+                question: "Concernant API Gateway throttling et protection contre abus, lesquelles sont vraies ? (2 bonnes réponses)",
+                options: [
+                    "API Gateway permet configurer quotas et throttling par stage/usage plan.",
+                    "API Gateway ne propose aucun mécanisme de throttling ; tout est côté backend.",
+                    "AWS WAF peut être utilisé devant API Gateway (via CloudFront ou Regional) pour bloquer patterns.",
+                    "Il n'est pas possible d'intégrer API Gateway avec CloudFront."
+                ],
+                correct: [0, 2],
+                explanation: "API Gateway supporte throttling par usage plan et WAF peut protéger API Gateway. API Gateway peut s'intégrer avec CloudFront."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let userAnswers = {};
+        let startTime = Date.now();
+        let examDuration = 130 * 60 * 1000; // 130 minutes in milliseconds
+        let timerInterval;
+        let showingJustification = false;
+
+        function initializeQuiz() {
+            startTimer();
+            renderCurrentQuestion();
+            updateProgress();
+            updateNavigation();
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            const elapsed = Date.now() - startTime;
+            const remaining = Math.max(0, examDuration - elapsed);
+            
+            const minutes = Math.floor(remaining / 60000);
+            const seconds = Math.floor((remaining % 60000) / 1000);
+            
+            const timeString = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('timer').textContent = timeString;
+            document.getElementById('timeRemaining').textContent = timeString;
+            
+            // Warning when less than 10 minutes
+            if (remaining < 600000 && remaining > 0) {
+                document.getElementById('timer').classList.add('timer-warning');
+            }
+            
+            // Auto submit when time is up
+            if (remaining <= 0) {
+                clearInterval(timerInterval);
+                submitQuiz();
+            }
+        }
+
+        function renderCurrentQuestion() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            const currentQuestion = quizData[currentQuestionIndex];
+            if (!currentQuestion) return;
+
+            const questionCard = document.createElement('div');
+            questionCard.className = 'question-card active';
+
+            const questionTypeText = currentQuestion.type === 'single' ? 'Choix unique' : `Choix multiple — ${currentQuestion.correct.length} bonnes`;
+
+            let html = `
+                <div class="question">
+                    <div class="question-type">${questionTypeText}</div>
+                    <h3>
+                        <span class="question-number">Q${currentQuestion.id}</span>
+                        ${currentQuestion.question}
+                    </h3>
+                    ${renderQuestionInput(currentQuestion)}
+                    <div class="justification" id="justification-${currentQuestion.id}">
+                        <h4>Explication:</h4>
+                        <p>${currentQuestion.explanation}</p>
+                    </div>
+                </div>
+            `;
+
+            questionCard.innerHTML = html;
+            container.appendChild(questionCard);
+
+            // Restore user's previous answer if any
+            restoreAnswer(currentQuestion);
+        }
+
+        function renderQuestionInput(question) {
+            const inputType = question.type === 'single' ? 'radio' : 'checkbox';
+            return `
+                <div class="options">
+                    ${question.options.map((option, index) => `
+                        <div class="option" onclick="selectOption(${question.id}, ${index}, '${inputType}')">
+                            <input type="${inputType}" name="q${question.id}" value="${index}" id="q${question.id}_${index}">
+                            <label for="q${question.id}_${index}">${option}</label>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function selectOption(questionId, optionIndex, type) {
+            const input = document.getElementById(`q${questionId}_${optionIndex}`);
+            
+            if (type === 'radio') {
+                // Clear all options for this question
+                document.querySelectorAll(`input[name="q${questionId}"]`).forEach(inp => {
+                    inp.checked = false;
+                    inp.closest('.option').classList.remove('selected');
+                });
+                
+                input.checked = true;
+                input.closest('.option').classList.add('selected');
+                userAnswers[questionId] = [optionIndex];
+            } else if (type === 'checkbox') {
+                input.checked = !input.checked;
+                input.closest('.option').classList.toggle('selected', input.checked);
+                
+                if (!userAnswers[questionId]) userAnswers[questionId] = [];
+                
+                if (input.checked) {
+                    if (!userAnswers[questionId].includes(optionIndex)) {
+                        userAnswers[questionId].push(optionIndex);
+                    }
+                } else {
+                    userAnswers[questionId] = userAnswers[questionId].filter(i => i !== optionIndex);
+                }
+            }
+            
+            updateNavigation();
+        }
+
+        function restoreAnswer(question) {
+            const answer = userAnswers[question.id];
+            if (!answer || answer.length === 0) return;
+
+            answer.forEach(index => {
+                const input = document.getElementById(`q${question.id}_${index}`);
+                if (input) {
+                    input.checked = true;
+                    input.closest('.option').classList.add('selected');
+                }
+            });
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / quizData.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `Question ${currentQuestionIndex + 1} of ${quizData.length}`;
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            const isLastQuestion = currentQuestionIndex === quizData.length - 1;
+            
+            if (isLastQuestion) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'inline-block';
+            } else {
+                nextBtn.style.display = 'inline-block';
+                submitBtn.style.display = 'none';
+            }
+        }
+
+        function nextQuestion() {
+            if (!showingJustification) {
+                showJustification();
+                showingJustification = true;
+                document.getElementById('nextBtn').textContent = 'Continue';
+            } else {
+                if (currentQuestionIndex < quizData.length - 1) {
+                    currentQuestionIndex++;
+                    showingJustification = false;
+                    document.getElementById('nextBtn').textContent = 'Next';
+                    renderCurrentQuestion();
+                    updateProgress();
+                    updateNavigation();
+                }
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                showingJustification = false;
+                document.getElementById('nextBtn').textContent = 'Next';
+                renderCurrentQuestion();
+                updateProgress();
+                updateNavigation();
+            }
+        }
+
+        function showJustification() {
+            const currentQuestion = quizData[currentQuestionIndex];
+            if (currentQuestion) {
+                const justificationElement = document.getElementById(`justification-${currentQuestion.id}`);
+                if (justificationElement) {
+                    justificationElement.classList.add('show');
+                    highlightCorrectAnswers(currentQuestion);
+                }
+            }
+        }
+
+        function highlightCorrectAnswers(question) {
+            question.options.forEach((option, index) => {
+                const optionElement = document.getElementById(`q${question.id}_${index}`);
+                if (optionElement) {
+                    const optionDiv = optionElement.closest('.option');
+                    if (question.correct.includes(index)) {
+                        optionDiv.classList.add('correct');
+                    } else if (userAnswers[question.id] && userAnswers[question.id].includes(index)) {
+                        optionDiv.classList.add('incorrect');
+                    }
+                }
+            });
+        }
+
+        function endExam() {
+            if (confirm('Are you sure you want to end the exam? This will submit your current answers.')) {
+                submitQuiz();
+            }
+        }
+
+        function submitQuiz() {
+            clearInterval(timerInterval);
+            calculateScore();
+            showScorePage();
+        }
+
+        function calculateScore() {
+            let totalScore = 0;
+            const maxScore = quizData.length;
+
+            quizData.forEach(question => {
+                const userAnswer = userAnswers[question.id] || [];
+                const correctAnswer = question.correct;
+                
+                // Must get ALL correct answers and NO incorrect ones
+                const isCorrect = correctAnswer.length === userAnswer.length && 
+                                 correctAnswer.every(val => userAnswer.includes(val));
+
+                if (isCorrect) {
+                    totalScore++;
+                }
+            });
+
+            return {
+                totalScore,
+                maxScore,
+                percentage: Math.round((totalScore / maxScore) * 100),
+                awsScore: Math.round(100 + 18 * totalScore)
+            };
+        }
+
+        function showScorePage() {
+            const scoreData = calculateScore();
+            
+            // Hide quiz content
+            document.querySelector('.quiz-header').style.display = 'none';
+            document.getElementById('questionsContainer').style.display = 'none';
+            document.querySelector('.navigation').style.display = 'none';
+            
+            // Show score page
+            const scorePage = document.getElementById('scorePage');
+            scorePage.classList.add('show');
+            
+            // Update score display
+            const scoreCircle = document.getElementById('scoreCircle');
+            const scorePercentage = document.getElementById('scorePercentage');
+            const awsScore = document.getElementById('awsScore');
+            const scoreTitle = document.getElementById('scoreTitle');
+            const scoreDescription = document.getElementById('scoreDescription');
+            
+            scorePercentage.textContent = `${scoreData.totalScore}/50`;
+            awsScore.textContent = scoreData.awsScore;
+            
+            // Set score category and styling
+            if (scoreData.awsScore >= 820) {
+                scoreCircle.className = 'score-circle score-excellent';
+                scoreTitle.textContent = 'Excellent!';
+                scoreDescription.textContent = 'Outstanding performance! You\'re well prepared for the SAA-C03 exam.';
+            } else if (scoreData.awsScore >= 720) {
+                scoreCircle.className = 'score-circle score-good';
+                scoreTitle.textContent = 'Passing Score!';
+                scoreDescription.textContent = 'Good job! You would likely pass the SAA-C03 exam.';
+            } else if (scoreData.awsScore >= 600) {
+                scoreCircle.className = 'score-circle score-average';
+                scoreTitle.textContent = 'Almost There!';
+                scoreDescription.textContent = 'You\'re close to passing. Review the areas below and practice more.';
+            } else {
+                scoreCircle.className = 'score-circle score-poor';
+                scoreTitle.textContent = 'More Study Needed';
+                scoreDescription.textContent = 'Consider additional study and practice before taking the exam.';
+            }
+            
+            // Show detailed breakdown
+            showScoreBreakdown(scoreData);
+        }
+
+        function showScoreBreakdown(scoreData) {
+            const breakdown = document.getElementById('scoreBreakdown');
+            breakdown.innerHTML = `
+                <div class="score-item">
+                    <h3>Raw Score</h3>
+                    <p>${scoreData.totalScore} out of ${scoreData.maxScore} correct</p>
+                    <p><strong>${scoreData.percentage}%</strong></p>
+                </div>
+                <div class="score-item">
+                    <h3>Estimated AWS Score</h3>
+                    <p>Score: ${scoreData.awsScore}/1000</p>
+                    <p><strong>${scoreData.awsScore >= 720 ? 'PASS' : 'FAIL'}</strong></p>
+                </div>
+                <div class="score-item">
+                    <h3>Time Performance</h3>
+                    <p>Completed in: ${formatTime(Date.now() - startTime)}</p>
+                    <p><strong>Target: 130 minutes</strong></p>
+                </div>
+            `;
+        }
+
+        function formatTime(milliseconds) {
+            const minutes = Math.floor(milliseconds / 60000);
+            const seconds = Math.floor((milliseconds % 60000) / 1000);
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            userAnswers = {};
+            startTime = Date.now();
+            showingJustification = false;
+            
+            // Show quiz content
+            document.querySelector('.quiz-header').style.display = 'block';
+            document.getElementById('questionsContainer').style.display = 'block';
+            document.querySelector('.navigation').style.display = 'block';
+            
+            // Hide score page
+            document.getElementById('scorePage').classList.remove('show');
+            
+            // Reset navigation
+            document.getElementById('nextBtn').textContent = 'Next';
+            document.getElementById('timer').classList.remove('timer-warning');
+            
+            // Restart quiz
+            initializeQuiz();
+        }
+
+        // Initialize the quiz when page loads
+        document.addEventListener('DOMContentLoaded', initializeQuiz);
+    </script>
+</body>
+</html>
