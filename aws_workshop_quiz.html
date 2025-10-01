@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Security Workshop Knowledge Assessment - 50 Questions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .quiz-header {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .quiz-header h1 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 2.5em;
+        }
+
+        .quiz-header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+
+        .quiz-info {
+            background: #e8f4fd;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .quiz-info h3 {
+            color: #2980b9;
+            margin-bottom: 10px;
+        }
+
+        .progress-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .progress-bar {
+            background: #ecf0f1;
+            height: 10px;
+            border-radius: 5px;
+            flex: 1;
+            margin: 0 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+            width: 0%;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .section-header h2 {
+            margin-bottom: 10px;
+        }
+
+        .question-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .question-card.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .question {
+            margin-bottom: 25px;
+        }
+
+        .question h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            line-height: 1.4;
+        }
+
+        .question-number {
+            background: #3498db;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-right: 10px;
+            display: inline-block;
+        }
+
+        .options {
+            margin-left: 20px;
+        }
+
+        .option {
+            margin: 12px 0;
+            padding: 12px;
+            border: 2px solid #ecf0f1;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            border-color: #3498db;
+            background: #e8f4fd;
+        }
+
+        .option.selected {
+            border-color: #3498db;
+            background: #d6eaf8;
+        }
+
+        .option.correct {
+            border-color: #27ae60;
+            background: #d5f4e6;
+        }
+
+        .option.incorrect {
+            border-color: #e74c3c;
+            background: #fadbd8;
+        }
+
+        .option input {
+            margin-right: 12px;
+            transform: scale(1.2);
+        }
+
+        .option label {
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .justification {
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .justification.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .justification h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .navigation {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+        }
+
+        .score-page {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            display: none;
+        }
+
+        .score-page.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            font-weight: bold;
+            color: white;
+            position: relative;
+        }
+
+        .score-excellent {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .score-good {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+        }
+
+        .score-average {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+        }
+
+        .score-poor {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .score-details {
+            margin: 30px 0;
+        }
+
+        .score-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .section-score {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #3498db;
+        }
+
+        .section-score h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .score-bar {
+            background: #ecf0f1;
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .score-fill {
+            background: linear-gradient(90deg, #3498db, #2980b9);
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.3s ease;
+        }
+
+        .recommendations {
+            background: #e8f8f5;
+            border-left: 4px solid #27ae60;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .recommendations h3 {
+            color: #27ae60;
+            margin-bottom: 15px;
+        }
+
+        .recommendations ul {
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .recommendations li {
+            margin: 8px 0;
+            color: #2c3e50;
+        }
+
+        .home-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            color: #2c3e50;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .home-link:hover {
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .quiz-header h1 {
+                font-size: 2em;
+            }
+            
+            .question-card, .quiz-header {
+                padding: 20px;
+            }
+
+            .home-link {
+                position: relative;
+                top: auto;
+                left: auto;
+                display: block;
+                text-align: center;
+                margin: 20px auto;
+                width: fit-content;
+            }
+
+            .progress-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .progress-bar {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="home-link">← Back to Home</a>
+    
+    <div class="container">
+        <!-- Quiz Header -->
+        <div class="quiz-header">
+            <h1>AWS Security Workshop Knowledge Assessment</h1>
+            <p>Comprehensive test covering AWS security tools, log analysis, incident response, and advanced security practices</p>
+            
+            <div class="quiz-info">
+                <h3>📋 Assessment Information</h3>
+                <ul style="text-align: left; max-width: 600px; margin: 0 auto;">
+                    <li><strong>Questions:</strong> 50 multiple choice questions</li>
+                    <li><strong>Domains:</strong> 10 comprehensive security areas</li>
+                    <li><strong>Duration:</strong> 60-90 minutes (self-paced)</li>
+                    <li><strong>Scoring:</strong> Immediate feedback with explanations</li>
+                    <li><strong>Difficulty:</strong> Beginner to Advanced levels</li>
+                </ul>
+            </div>
+            
+            <div class="progress-container">
+                <span id="progressText">Question 1 of 50</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                <span id="completionStatus">0% Complete</span>
+            </div>
+        </div>
+
+        <!-- Questions will be inserted here -->
+        <div id="questionsContainer"></div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+            <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" disabled>Previous</button>
+            <button class="btn" id="nextBtn" onclick="nextQuestion()">Next</button>
+            <button class="btn" id="submitBtn" onclick="submitQuiz()" style="display: none;">Submit Assessment</button>
+        </div>
+
+        <!-- Score Page -->
+        <div class="score-page" id="scorePage">
+            <h1>Assessment Complete!</h1>
+            <div class="score-circle" id="scoreCircle">
+                <span id="scorePercentage">0%</span>
+            </div>
+            <div class="score-details">
+                <h2 id="scoreTitle">Your Performance</h2>
+                <p id="scoreDescription">You've completed the AWS Security Workshop Knowledge Assessment</p>
+            </div>
+            <div class="score-breakdown" id="scoreBreakdown"></div>
+            <div class="recommendations" id="recommendations"></div>
+            <button class="btn" onclick="restartQuiz()">Retake Assessment</button>
+            <button class="btn btn-secondary" onclick="window.location.href='index.html'">Back to Home</button>
+        </div>
+    </div>
+
+    <script>
+        // Comprehensive quiz data with 50 AWS Security questions across 10 domains
+        const quizData = [
+            {
+                section: "AWS Identity and Access Management (IAM)",
+                description: "Questions about user management, roles, policies, and access control",
+                questions: [
+                    {
+                        id: 1,
+                        type: "multiple-choice",
+                        question: "What is the principle of least privilege in IAM?",
+                        options: [
+                            "Users should have maximum permissions for flexibility",
+                            "Users should have only the minimum permissions necessary to perform their job",
+                            "All users should share the same permissions",
+                            "Permissions should be granted at the account level only"
+                        ],
+                        correct: 1,
+                        justification: "The principle of least privilege means granting users the minimum permissions required to accomplish their tasks, reducing security risks and potential damage from compromised accounts."
+                    },
+                    {
+                        id: 2,
+                        type: "multiple-choice",
+                        question: "Which IAM feature allows you to grant temporary access to AWS resources?",
+                        options: [
+                            "IAM Users",
+                            "IAM Groups", 
+                            "IAM Roles",
+                            "IAM Policies"
+                        ],
+                        correct: 2,
+                        justification: "IAM Roles provide temporary security credentials and can be assumed by users, applications, or services to access AWS resources without long-term credentials."
+                    },
+                    {
+                        id: 3,
+                        type: "multiple-choice",
+                        question: "What is the recommended way to allow EC2 instances to access other AWS services securely?",
+                        options: [
+                            "Store AWS access keys in the instance user data",
+                            "Use IAM roles attached to the EC2 instance",
+                            "Hardcode credentials in the application",
+                            "Use root account credentials"
+                        ],
+                        correct: 1,
+                        justification: "IAM roles provide temporary, rotating credentials to EC2 instances automatically. This eliminates the need to store long-term credentials on instances and follows security best practices."
+                    },
+                    {
+                        id: 4,
+                        type: "multiple-choice",
+                        question: "Which IAM policy type is attached directly to an IAM user, group, or role?",
+                        options: [
+                            "Resource-based policy",
+                            "Identity-based policy",
+                            "Service control policy",
+                            "Permission boundary"
+                        ],
+                        correct: 1,
+                        justification: "Identity-based policies are attached to IAM identities (users, groups, or roles) and specify what actions those identities can perform on which resources."
+                    },
+                    {
+                        id: 5,
+                        type: "multiple-choice",
+                        question: "What is the purpose of IAM Access Analyzer?",
+                        options: [
+                            "To create IAM policies automatically",
+                            "To identify resources shared with external entities",
+                            "To monitor IAM user login activity",
+                            "To rotate access keys automatically"
+                        ],
+                        correct: 1,
+                        justification: "IAM Access Analyzer helps identify resources in your organization and accounts that are shared with external entities, helping you understand potential security risks."
+                    }
+                ]
+            },
+            {
+                section: "AWS CloudFormation Security",
+                description: "Questions about secure infrastructure as code and resource creation",
+                questions: [
+                    {
+                        id: 6,
+                        type: "multiple-choice",
+                        question: "What is AWS CloudFormation primarily used for?",
+                        options: [
+                            "Infrastructure as Code - defining cloud resources in templates",
+                            "Database management and optimization", 
+                            "Network traffic monitoring",
+                            "User authentication and authorization"
+                        ],
+                        correct: 0,
+                        justification: "AWS CloudFormation is Amazon's Infrastructure as Code service that allows you to define cloud resources using JSON or YAML templates, enabling reproducible, version-controlled infrastructure deployments."
+                    },
+                    {
+                        id: 7,
+                        type: "multiple-choice",
+                        question: "What happens if a CloudFormation stack creation fails partway through?",
+                        options: [
+                            "The stack creation stops and leaves partially created resources",
+                            "CloudFormation automatically rolls back and deletes all created resources",
+                            "The stack continues with default configurations",
+                            "CloudFormation retries indefinitely until success"
+                        ],
+                        correct: 1,
+                        justification: "CloudFormation provides automatic rollback on failure. If stack creation fails, all successfully created resources are automatically deleted to prevent orphaned resources and unexpected charges."
+                    },
+                    {
+                        id: 8,
+                        type: "multiple-choice",
+                        question: "Which CloudFormation feature allows you to share resource outputs between different stacks?",
+                        options: [
+                            "Stack Parameters",
+                            "Cross-Stack References (Outputs and Fn::ImportValue)",
+                            "Stack Policies",
+                            "Change Sets"
+                        ],
+                        correct: 1,
+                        justification: "Cross-Stack References using Outputs and Fn::ImportValue allow you to export values from one stack and import them in another, enabling modular and reusable infrastructure design."
+                    },
+                    {
+                        id: 9,
+                        type: "multiple-choice",
+                        question: "What is the purpose of CloudFormation Change Sets?",
+                        options: [
+                            "To automatically deploy changes to production",
+                            "To preview changes before executing stack updates",
+                            "To schedule stack deployments",
+                            "To backup stack configurations"
+                        ],
+                        correct: 1,
+                        justification: "Change Sets provide a preview of proposed changes to your stack before execution, showing which resources will be added, modified, or deleted. This helps prevent unintended changes in production environments."
+                    },
+                    {
+                        id: 10,
+                        type: "multiple-choice",
+                        question: "How can you prevent accidental deletion of critical CloudFormation stacks?",
+                        options: [
+                            "Enable termination protection on the stack",
+                            "Use stack policies only",
+                            "Remove delete permissions from all users",
+                            "Create multiple backup copies"
+                        ],
+                        correct: 0,
+                        justification: "Stack termination protection prevents accidental deletion of CloudFormation stacks. When enabled, users must explicitly disable protection before they can delete the stack."
+                    }
+                ]
+            },
+            {
+                section: "AWS Lambda & Serverless Security",
+                description: "Questions about serverless computing security and Lambda functions",
+                questions: [
+                    {
+                        id: 11,
+                        type: "multiple-choice",
+                        question: "What is the maximum execution time limit for an AWS Lambda function?",
+                        options: [
+                            "5 minutes",
+                            "10 minutes",
+                            "15 minutes",
+                            "30 minutes"
+                        ],
+                        correct: 2,
+                        justification: "AWS Lambda functions have a maximum execution timeout of 15 minutes. For longer-running tasks, consider using services like ECS, Batch, or Step Functions."
+                    },
+                    {
+                        id: 12,
+                        type: "multiple-choice",
+                        question: "Which AWS service can trigger Lambda functions based on file uploads to S3?",
+                        options: [
+                            "CloudWatch Events",
+                            "S3 Event Notifications",
+                            "API Gateway",
+                            "SQS"
+                        ],
+                        correct: 1,
+                        justification: "S3 Event Notifications can directly trigger Lambda functions when objects are created, deleted, or modified in an S3 bucket, enabling real-time processing of uploaded files."
+                    },
+                    {
+                        id: 13,
+                        type: "multiple-choice",
+                        question: "What is a 'cold start' in AWS Lambda?",
+                        options: [
+                            "Starting Lambda in a cold climate data center",
+                            "The initial delay when Lambda provisions a new execution environment",
+                            "Restarting a crashed Lambda function",
+                            "Running Lambda with minimal memory allocation"
+                        ],
+                        correct: 1,
+                        justification: "A cold start occurs when Lambda needs to provision a new execution environment for your function, typically happening after periods of inactivity or when scaling up. This can add latency to function execution."
+                    },
+                    {
+                        id: 14,
+                        type: "multiple-choice",
+                        question: "Which Lambda feature helps reduce cold start latency for critical applications?",
+                        options: [
+                            "Reserved Concurrency",
+                            "Provisioned Concurrency",
+                            "Dead Letter Queues",
+                            "Lambda Layers"
+                        ],
+                        correct: 1,
+                        justification: "Provisioned Concurrency keeps Lambda functions initialized and hyper-ready to respond in double-digit milliseconds, significantly reducing cold start latency for critical applications."
+                    },
+                    {
+                        id: 15,
+                        type: "multiple-choice",
+                        question: "What is the best practice for storing sensitive configuration data for Lambda functions?",
+                        options: [
+                            "Environment variables in plain text",
+                            "Hardcode in the function code",
+                            "AWS Systems Manager Parameter Store or Secrets Manager",
+                            "Store in a public S3 bucket"
+                        ],
+                        correct: 2,
+                        justification: "AWS Systems Manager Parameter Store or Secrets Manager provide secure, encrypted storage for configuration data and secrets, with fine-grained access control and audit trails."
+                    }
+                ]
+            },
+            {
+                section: "Amazon S3 Security",
+                description: "Questions about S3 security features and best practices",
+                questions: [
+                    {
+                        id: 16,
+                        type: "multiple-choice",
+                        question: "What is the most secure way to grant temporary access to S3 objects for external users?",
+                        options: [
+                            "Pre-signed URLs with expiration times",
+                            "Public read permissions",
+                            "Embedded access keys in applications",
+                            "Shared IAM user credentials"
+                        ],
+                        correct: 0,
+                        justification: "Pre-signed URLs provide temporary, secure access to S3 objects without requiring AWS credentials. They automatically expire and can be scoped to specific actions and time limits."
+                    },
+                    {
+                        id: 17,
+                        type: "multiple-choice",
+                        question: "Which S3 feature prevents accidental deletion and modification of objects?",
+                        options: [
+                            "S3 Versioning",
+                            "S3 Object Lock",
+                            "S3 Access Control Lists",
+                            "S3 Bucket Policies"
+                        ],
+                        correct: 1,
+                        justification: "S3 Object Lock provides WORM (Write Once Read Many) capability, preventing objects from being deleted or modified for a specified retention period. It's designed for regulatory compliance."
+                    },
+                    {
+                        id: 18,
+                        type: "multiple-choice",
+                        question: "What is the difference between S3 bucket policies and IAM policies for S3 access control?",
+                        options: [
+                            "No difference - they work identically",
+                            "Bucket policies control resource-based access; IAM policies control user-based access",
+                            "Bucket policies are faster to evaluate",
+                            "IAM policies can only be used with specific S3 storage classes"
+                        ],
+                        correct: 1,
+                        justification: "Bucket policies are resource-based and attached to the S3 bucket, controlling who can access it. IAM policies are user-based and attached to users/roles/groups, controlling what AWS resources they can access."
+                    },
+                    {
+                        id: 19,
+                        type: "multiple-choice",
+                        question: "Which S3 encryption option is managed entirely by AWS without customer key management?",
+                        options: [
+                            "SSE-C (Server-Side Encryption with Customer-Provided Keys)",
+                            "SSE-KMS (Server-Side Encryption with AWS KMS)",
+                            "SSE-S3 (Server-Side Encryption with Amazon S3-Managed Keys)",
+                            "Client-side encryption"
+                        ],
+                        correct: 2,
+                        justification: "SSE-S3 uses encryption keys managed entirely by AWS. You don't need to manage encryption keys, and AWS handles key rotation automatically. It's the simplest encryption option for S3."
+                    },
+                    {
+                        id: 20,
+                        type: "multiple-choice",
+                        question: "What does S3 Block Public Access do?",
+                        options: [
+                            "Blocks all access to S3 buckets",
+                            "Provides additional layer of protection against public access to buckets and objects",
+                            "Only works with new buckets",
+                            "Automatically encrypts all objects"
+                        ],
+                        correct: 1,
+                        justification: "S3 Block Public Access provides an additional layer of protection against inadvertent public access to buckets and objects, overriding bucket policies and ACLs that might grant public access."
+                    }
+                ]
+            },
+            {
+                section: "AWS VPC & Network Security",
+                description: "Questions about Virtual Private Cloud and network security",
+                questions: [
+                    {
+                        id: 21,
+                        type: "multiple-choice",
+                        question: "What is the primary difference between Security Groups and Network ACLs?",
+                        options: [
+                            "Security Groups are stateful; Network ACLs are stateless",
+                            "Security Groups operate at subnet level; Network ACLs operate at instance level",
+                            "Security Groups support deny rules; Network ACLs support only allow rules",
+                            "There is no functional difference"
+                        ],
+                        correct: 0,
+                        justification: "Security Groups are stateful (return traffic is automatically allowed), while Network ACLs are stateless (you must explicitly allow return traffic). Security Groups operate at instance level, Network ACLs at subnet level."
+                    },
+                    {
+                        id: 22,
+                        type: "multiple-choice",
+                        question: "Which VPC component allows private subnet instances to access the internet for updates without being directly accessible from the internet?",
+                        options: [
+                            "Internet Gateway",
+                            "NAT Gateway",
+                            "VPC Endpoint",
+                            "Direct Connect"
+                        ],
+                        correct: 1,
+                        justification: "NAT Gateway enables instances in private subnets to initiate outbound internet connections (like downloading updates) while preventing inbound connections from the internet, maintaining security."
+                    },
+                    {
+                        id: 23,
+                        type: "multiple-choice",
+                        question: "What is the purpose of VPC Flow Logs?",
+                        options: [
+                            "To monitor application performance",
+                            "To capture network traffic metadata for security analysis",
+                            "To automatically block malicious traffic",
+                            "To optimize network routing"
+                        ],
+                        correct: 1,
+                        justification: "VPC Flow Logs capture metadata about IP traffic flowing through your VPC, including source/destination IPs, ports, and protocols. They're essential for security monitoring, troubleshooting, and compliance auditing."
+                    },
+                    {
+                        id: 24,
+                        type: "multiple-choice",
+                        question: "Which feature allows private connectivity to AWS services without internet routing?",
+                        options: [
+                            "VPC Peering",
+                            "VPC Endpoints",
+                            "Internet Gateway",
+                            "Customer Gateway"
+                        ],
+                        correct: 1,
+                        justification: "VPC Endpoints enable private connectivity to AWS services (like S3, DynamoDB) without routing traffic through the internet, improving security and reducing data transfer costs."
+                    },
+                    {
+                        id: 25,
+                        type: "multiple-choice",
+                        question: "What is the maximum number of rules you can have in a Security Group?",
+                        options: [
+                            "50",
+                            "60",
+                            "100",
+                            "120"
+                        ],
+                        correct: 1,
+                        justification: "Each Security Group can have up to 60 inbound rules and 60 outbound rules, for a total of 120 rules. This limit helps maintain performance while providing flexibility for access control."
+                    }
+                ]
+            },
+            {
+                section: "AWS CloudTrail & Logging",
+                description: "Questions about audit trails and security monitoring",
+                questions: [
+                    {
+                        id: 26,
+                        type: "multiple-choice",
+                        question: "Which AWS service provides detailed logging of API calls for security auditing?",
+                        options: [
+                            "CloudWatch Logs",
+                            "AWS CloudTrail",
+                            "AWS Config",
+                            "VPC Flow Logs"
+                        ],
+                        correct: 1,
+                        justification: "AWS CloudTrail logs API calls made to AWS services, providing detailed audit trails including who made the call, when, from where, and what changes were made. It's essential for security auditing and compliance."
+                    },
+                    {
+                        id: 27,
+                        type: "multiple-choice",
+                        question: "What type of events does CloudTrail capture by default?",
+                        options: [
+                            "All API calls including read-only operations",
+                            "Management events only",
+                            "Data events only",
+                            "Security events only"
+                        ],
+                        correct: 1,
+                        justification: "CloudTrail captures management events by default, which include operations that modify AWS resources. Data events (like S3 object-level operations) and Insights events require additional configuration."
+                    },
+                    {
+                        id: 28,
+                        type: "multiple-choice",
+                        question: "How long does CloudTrail retain event logs by default?",
+                        options: [
+                            "7 days",
+                            "30 days",
+                            "90 days",
+                            "1 year"
+                        ],
+                        correct: 2,
+                        justification: "CloudTrail retains event logs for 90 days by default in the CloudTrail Event History. For longer retention, you need to create a trail that delivers logs to S3."
+                    },
+                    {
+                        id: 29,
+                        type: "multiple-choice",
+                        question: "What is CloudTrail Insights used for?",
+                        options: [
+                            "Capturing data events",
+                            "Detecting unusual activity patterns in API usage",
+                            "Encrypting CloudTrail logs",
+                            "Creating custom dashboards"
+                        ],
+                        correct: 1,
+                        justification: "CloudTrail Insights analyzes management events to detect unusual activity patterns, such as spikes in API calls or unusual resource provisioning, helping identify potential security issues."
+                    },
+                    {
+                        id: 30,
+                        type: "multiple-choice",
+                        question: "Which feature helps ensure CloudTrail log integrity?",
+                        options: [
+                            "Log encryption with KMS",
+                            "Log file validation",
+                            "Multi-region trails",
+                            "Event filtering"
+                        ],
+                        correct: 1,
+                        justification: "CloudTrail log file validation creates hash values for log files, allowing you to verify that logs haven't been tampered with after delivery to S3, ensuring log integrity."
+                    }
+                ]
+            },
+            {
+                section: "AWS GuardDuty & Threat Detection",
+                description: "Questions about threat detection and security monitoring",
+                questions: [
+                    {
+                        id: 31,
+                        type: "multiple-choice",
+                        question: "Which AWS service can detect unusual behavior and potential security threats in your AWS environment?",
+                        options: [
+                            "AWS Shield",
+                            "AWS GuardDuty",
+                            "AWS WAF",
+                            "AWS Inspector"
+                        ],
+                        correct: 1,
+                        justification: "AWS GuardDuty is a threat detection service that uses machine learning to analyze CloudTrail events, DNS logs, and VPC Flow Logs to identify malicious activity, compromised instances, and other security threats."
+                    },
+                    {
+                        id: 32,
+                        type: "multiple-choice",
+                        question: "What data sources does GuardDuty analyze?",
+                        options: [
+                            "Only CloudTrail logs",
+                            "CloudTrail, DNS logs, and VPC Flow Logs",
+                            "Only application logs",
+                            "Only network traffic"
+                        ],
+                        correct: 1,
+                        justification: "GuardDuty analyzes multiple data sources including CloudTrail event logs, DNS logs, VPC Flow Logs, and EKS audit logs to provide comprehensive threat detection across your AWS environment."
+                    },
+                    {
+                        id: 33,
+                        type: "multiple-choice",
+                        question: "How does GuardDuty help with threat intelligence?",
+                        options: [
+                            "It requires manual threat feed updates",
+                            "It uses AWS threat intelligence and third-party feeds automatically",
+                            "It only detects known attack patterns",
+                            "It doesn't include threat intelligence"
+                        ],
+                        correct: 1,
+                        justification: "GuardDuty automatically uses threat intelligence feeds from AWS, CrowdStrike, and Proofpoint, and continuously updates its detection algorithms to identify new and emerging threats."
+                    },
+                    {
+                        id: 34,
+                        type: "multiple-choice",
+                        question: "What happens when GuardDuty detects a threat?",
+                        options: [
+                            "It automatically blocks the threat",
+                            "It generates findings that can trigger automated responses",
+                            "It sends an email only",
+                            "It requires manual intervention to report findings"
+                        ],
+                        correct: 1,
+                        justification: "GuardDuty generates detailed findings that include severity levels and recommended actions. These findings can trigger automated remediation through EventBridge, Lambda functions, or Security Hub integrations."
+                    },
+                    {
+                        id: 35,
+                        type: "multiple-choice",
+                        question: "Which GuardDuty finding indicates cryptocurrency mining activity?",
+                        options: [
+                            "UnauthorizedAPICall",
+                            "CryptoCurrency:EC2/BitcoinTool.B",
+                            "Trojan:EC2/PhishingDomainRequest",
+                            "Backdoor:EC2/XORDDOS"
+                        ],
+                        correct: 1,
+                        justification: "The CryptoCurrency:EC2/BitcoinTool.B finding type indicates that an EC2 instance is making network requests associated with cryptocurrency mining activity, which could indicate a compromised instance."
+                    }
+                ]
+            },
+            {
+                section: "AWS Config & Compliance",
+                description: "Questions about configuration management and compliance monitoring",
+                questions: [
+                    {
+                        id: 36,
+                        type: "multiple-choice",
+                        question: "What is the primary purpose of AWS Config?",
+                        options: [
+                            "To configure AWS services automatically",
+                            "To track configuration changes and assess compliance",
+                            "To manage user access permissions",
+                            "To monitor application performance"
+                        ],
+                        correct: 1,
+                        justification: "AWS Config tracks configuration changes of AWS resources over time and assesses whether configurations comply with desired settings, helping with compliance monitoring and change management."
+                    },
+                    {
+                        id: 37,
+                        type: "multiple-choice",
+                        question: "What are AWS Config Rules used for?",
+                        options: [
+                            "To automatically remediate non-compliant resources",
+                            "To evaluate resource configurations against compliance requirements",
+                            "To create new AWS resources",
+                            "To manage IAM permissions"
+                        ],
+                        correct: 1,
+                        justification: "AWS Config Rules evaluate whether AWS resource configurations comply with specified requirements. They can be AWS managed rules or custom rules that define your compliance requirements."
+                    },
+                    {
+                        id: 38,
+                        type: "multiple-choice",
+                        question: "Which feature allows AWS Config to automatically fix non-compliant resources?",
+                        options: [
+                            "Config Rules",
+                            "Configuration Items",
+                            "Remediation Actions",
+                            "Configuration Snapshots"
+                        ],
+                        correct: 2,
+                        justification: "AWS Config Remediation Actions can automatically fix non-compliant resources using Systems Manager Automation documents or Lambda functions when Config Rules detect violations."
+                    },
+                    {
+                        id: 39,
+                        type: "multiple-choice",
+                        question: "What is a Configuration Item (CI) in AWS Config?",
+                        options: [
+                            "A rule that checks compliance",
+                            "A point-in-time snapshot of a resource's configuration",
+                            "An automated remediation action",
+                            "A notification setting"
+                        ],
+                        correct: 1,
+                        justification: "A Configuration Item (CI) is a point-in-time snapshot of the various attributes of a supported AWS resource, including metadata, attributes, relationships, and configuration."
+                    },
+                    {
+                        id: 40,
+                        type: "multiple-choice",
+                        question: "How can you be notified when resources become non-compliant in AWS Config?",
+                        options: [
+                            "Email notifications only",
+                            "SNS notifications when Config Rules are triggered",
+                            "SMS messages only",
+                            "In-console notifications only"
+                        ],
+                        correct: 1,
+                        justification: "AWS Config can send notifications via Amazon SNS when Config Rules detect compliance violations, allowing you to integrate with various notification and automation systems."
+                    }
+                ]
+            },
+            {
+                section: "AWS Secrets Manager & Parameter Store",
+                description: "Questions about secrets and configuration management",
+                questions: [
+                    {
+                        id: 41,
+                        type: "multiple-choice",
+                        question: "What is the primary advantage of AWS Secrets Manager over hardcoding secrets?",
+                        options: [
+                            "It's free to use",
+                            "It provides automatic rotation and secure storage of secrets",
+                            "It's faster than hardcoded values",
+                            "It doesn't require any configuration"
+                        ],
+                        correct: 1,
+                        justification: "AWS Secrets Manager provides secure storage of secrets with automatic rotation capabilities, encryption at rest and in transit, and fine-grained access control, eliminating the need to hardcode sensitive information."
+                    },
+                    {
+                        id: 42,
+                        type: "multiple-choice",
+                        question: "Which AWS service can automatically rotate database passwords?",
+                        options: [
+                            "Systems Manager Parameter Store",
+                            "AWS Secrets Manager",
+                            "IAM",
+                            "KMS"
+                        ],
+                        correct: 1,
+                        justification: "AWS Secrets Manager can automatically rotate database passwords using Lambda functions for supported database engines including RDS, Aurora, DocumentDB, and Redshift."
+                    },
+                    {
+                        id: 43,
+                        type: "multiple-choice",
+                        question: "What is the difference between Systems Manager Parameter Store Standard and Advanced parameters?",
+                        options: [
+                            "No difference in functionality",
+                            "Advanced parameters support larger values and parameter policies",
+                            "Standard parameters are more secure",
+                            "Advanced parameters are free"
+                        ],
+                        correct: 1,
+                        justification: "Advanced parameters in Systems Manager Parameter Store support larger values (up to 8KB vs 4KB), parameter policies for expiration and notification, and higher throughput, but incur charges."
+                    },
+                    {
+                        id: 44,
+                        type: "multiple-choice",
+                        question: "How should you retrieve secrets in Lambda functions?",
+                        options: [
+                            "Store them in environment variables",
+                            "Retrieve them at runtime using AWS SDK",
+                            "Hardcode them in the function",
+                            "Store them in a file"
+                        ],
+                        correct: 1,
+                        justification: "Best practice is to retrieve secrets at runtime using the AWS SDK to call Secrets Manager or Parameter Store, ensuring secrets are not exposed in environment variables or code."
+                    },
+                    {
+                        id: 45,
+                        type: "multiple-choice",
+                        question: "Which service is more cost-effective for storing large numbers of configuration parameters?",
+                        options: [
+                            "AWS Secrets Manager",
+                            "Systems Manager Parameter Store (Standard)",
+                            "Both cost the same",
+                            "KMS"
+                        ],
+                        correct: 1,
+                        justification: "Systems Manager Parameter Store Standard tier is free for up to 10,000 parameters, making it more cost-effective for configuration data, while Secrets Manager is optimized for secrets with rotation capabilities."
+                    }
+                ]
+            },
+            {
+                section: "AWS Security Hub & Compliance",
+                description: "Questions about centralized security findings and compliance frameworks",
+                questions: [
+                    {
+                        id: 46,
+                        type: "multiple-choice",
+                        question: "What is the primary purpose of AWS Security Hub?",
+                        options: [
+                            "To replace all security services",
+                            "To provide a centralized view of security findings across AWS accounts",
+                            "To automatically fix all security issues",
+                            "To manage user access permissions"
+                        ],
+                        correct: 1,
+                        justification: "AWS Security Hub provides a centralized dashboard that aggregates security findings from multiple AWS security services and third-party tools, giving you a comprehensive view of your security posture."
+                    },
+                    {
+                        id: 47,
+                        type: "multiple-choice",
+                        question: "Which compliance frameworks does Security Hub support?",
+                        options: [
+                            "Only AWS Well-Architected Framework",
+                            "AWS Foundational Security Standard, CIS, and PCI DSS",
+                            "Only custom frameworks",
+                            "Only SOC 2"
+                        ],
+                        correct: 1,
+                        justification: "Security Hub supports multiple compliance standards including AWS Foundational Security Standard, CIS AWS Foundations Benchmark, and PCI DSS, with automated compliance checking."
+                    },
+                    {
+                        id: 48,
+                        type: "multiple-choice",
+                        question: "What is the AWS Security Finding Format (ASFF)?",
+                        options: [
+                            "A proprietary AWS encryption format",
+                            "A standardized JSON format for security findings",
+                            "A configuration file format",
+                            "A log file format"
+                        ],
+                        correct: 1,
+                        justification: "The AWS Security Finding Format (ASFF) is a standardized JSON format that normalizes security findings from different sources, enabling consistent processing and analysis in Security Hub."
+                    },
+                    {
+                        id: 49,
+                        type: "multiple-choice",
+                        question: "How can you automate response to Security Hub findings?",
+                        options: [
+                            "Manual intervention only",
+                            "EventBridge rules triggering Lambda functions",
+                            "Email notifications only",
+                            "Automatic deletion of findings"
+                        ],
+                        correct: 1,
+                        justification: "You can create EventBridge rules that trigger when Security Hub findings meet specific criteria, allowing automated responses through Lambda functions, Systems Manager automation, or other AWS services."
+                    },
+                    {
+                        id: 50,
+                        type: "multiple-choice",
+                        question: "What happens when you enable Security Hub in a multi-account environment?",
+                        options: [
+                            "It only works in the primary account",
+                            "It can aggregate findings from member accounts to a central administrator account",
+                            "Each account operates independently",
+                            "It automatically fixes all security issues"
+                        ],
+                        correct: 1,
+                        justification: "In a multi-account setup, Security Hub can designate administrator accounts that receive aggregated findings from member accounts, providing centralized security monitoring across the organization."
+                    }
+                ]
+            }
+        ];
+
+        let currentSectionIndex = 0;
+        let currentQuestionIndex = 0;
+        let userAnswers = {};
+        let sectionScores = {};
+        let showingJustification = false;
+
+        function initializeQuiz() {
+            renderCurrentQuestion();
+            updateProgress();
+            updateNavigation();
+        }
+
+        function renderCurrentQuestion() {
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            const currentSection = quizData[currentSectionIndex];
+            const currentQuestion = currentSection.questions[currentQuestionIndex];
+
+            // Section header
+            const sectionHeader = document.createElement('div');
+            sectionHeader.className = 'section-header';
+            sectionHeader.innerHTML = `
+                <h2>${currentSection.section}</h2>
+                <p>${currentSection.description}</p>
+            `;
+
+            // Question card
+            const questionCard = document.createElement('div');
+            questionCard.className = 'question-card active';
+
+            let html = `
+                <div class="question">
+                    <h3><span class="question-number">Question ${getAbsoluteQuestionNumber()}</span>${currentQuestion.question}</h3>
+                    ${renderQuestionInput(currentQuestion)}
+                    <div class="justification" id="justification-${currentQuestion.id}">
+                        <h4>Explanation:</h4>
+                        <p>${currentQuestion.justification}</p>
+                    </div>
+                </div>
+            `;
+
+            questionCard.innerHTML = html;
+            container.appendChild(sectionHeader);
+            container.appendChild(questionCard);
+
+            // Restore user's previous answer if any
+            restoreAnswer(currentQuestion);
+        }
+
+        function renderQuestionInput(question) {
+            return `
+                <div class="options">
+                    ${question.options.map((option, index) => `
+                        <div class="option" onclick="selectOption(${question.id}, ${index})">
+                            <input type="radio" name="q${question.id}" value="${index}" id="q${question.id}_${index}">
+                            <label for="q${question.id}_${index}">${option}</label>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function selectOption(questionId, optionIndex) {
+            const input = document.getElementById(`q${questionId}_${optionIndex}`);
+            input.checked = true;
+            
+            // Update visual selection
+            document.querySelectorAll(`input[name="q${questionId}"]`).forEach(inp => {
+                inp.closest('.option').classList.remove('selected');
+            });
+            input.closest('.option').classList.add('selected');
+
+            userAnswers[questionId] = optionIndex;
+            updateNavigation();
+        }
+
+        function restoreAnswer(question) {
+            const answer = userAnswers[question.id];
+            if (answer !== undefined) {
+                const input = document.getElementById(`q${question.id}_${answer}`);
+                if (input) {
+                    input.checked = true;
+                    input.closest('.option').classList.add('selected');
+                }
+            }
+        }
+
+        function getAbsoluteQuestionNumber() {
+            let total = 0;
+            for (let i = 0; i < currentSectionIndex; i++) {
+                total += quizData[i].questions.length;
+            }
+            return total + currentQuestionIndex + 1;
+        }
+
+        function getTotalQuestions() {
+            return quizData.reduce((total, section) => total + section.questions.length, 0);
+        }
+
+        function updateProgress() {
+            const totalQuestions = getTotalQuestions();
+            const currentQuestionNum = getAbsoluteQuestionNumber();
+            const progress = (currentQuestionNum / totalQuestions) * 100;
+            
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `Question ${currentQuestionNum} of ${totalQuestions}`;
+            document.getElementById('completionStatus').textContent = `${Math.round(progress)}% Complete`;
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Previous button
+            prevBtn.disabled = currentSectionIndex === 0 && currentQuestionIndex === 0;
+            
+            // Next/Submit button
+            const isLastQuestion = currentSectionIndex === quizData.length - 1 && 
+                                  currentQuestionIndex === quizData[currentSectionIndex].questions.length - 1;
+            
+            if (isLastQuestion) {
+                nextBtn.style.display = 'none';
+                submitBtn.style.display = 'inline-block';
+            } else {
+                nextBtn.style.display = 'inline-block';
+                submitBtn.style.display = 'none';
+                nextBtn.textContent = showingJustification ? 'Continue' : 'Next';
+            }
+        }
+
+        function nextQuestion() {
+            if (!showingJustification) {
+                showJustification();
+                showingJustification = true;
+                updateNavigation();
+                
+                // Auto-advance after 3 seconds
+                setTimeout(() => {
+                    if (showingJustification) {
+                        advanceToNextQuestion();
+                    }
+                }, 3000);
+            } else {
+                advanceToNextQuestion();
+            }
+        }
+
+        function advanceToNextQuestion() {
+            if (currentQuestionIndex < quizData[currentSectionIndex].questions.length - 1) {
+                currentQuestionIndex++;
+            } else if (currentSectionIndex < quizData.length - 1) {
+                currentSectionIndex++;
+                currentQuestionIndex = 0;
+            }
+            
+            showingJustification = false;
+            renderCurrentQuestion();
+            updateProgress();
+            updateNavigation();
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+            } else if (currentSectionIndex > 0) {
+                currentSectionIndex--;
+                currentQuestionIndex = quizData[currentSectionIndex].questions.length - 1;
+            }
+            
+            showingJustification = false;
+            renderCurrentQuestion();
+            updateProgress();
+            updateNavigation();
+        }
+
+        function showJustification() {
+            const currentQuestion = quizData[currentSectionIndex].questions[currentQuestionIndex];
+            const justificationElement = document.getElementById(`justification-${currentQuestion.id}`);
+            justificationElement.classList.add('show');
+            
+            // Highlight correct answer
+            document.querySelectorAll(`input[name="q${currentQuestion.id}"]`).forEach((input, index) => {
+                const option = input.closest('.option');
+                if (index === currentQuestion.correct) {
+                    option.classList.add('correct');
+                } else if (input.checked) {
+                    option.classList.add('incorrect');
+                }
+            });
+        }
+
+        function submitQuiz() {
+            calculateSectionScores();
+            showScorePage();
+        }
+
+        function calculateSectionScores() {
+            quizData.forEach(section => {
+                let sectionScore = 0;
+                section.questions.forEach(question => {
+                    if (userAnswers[question.id] === question.correct) {
+                        sectionScore++;
+                    }
+                });
+                sectionScores[section.section] = {
+                    score: sectionScore,
+                    total: section.questions.length,
+                    percentage: Math.round((sectionScore / section.questions.length) * 100)
+                };
+            });
+        }
+
+        function showScorePage() {
+            // Calculate overall score
+            const totalCorrect = Object.values(sectionScores).reduce((sum, section) => sum + section.score, 0);
+            const totalQuestions = getTotalQuestions();
+            const overallPercentage = Math.round((totalCorrect / totalQuestions) * 100);
+            
+            // Hide quiz content
+            document.querySelector('.quiz-header').style.display = 'none';
+            document.getElementById('questionsContainer').style.display = 'none';
+            document.querySelector('.navigation').style.display = 'none';
+            
+            // Show score page
+            const scorePage = document.getElementById('scorePage');
+            scorePage.classList.add('show');
+            
+            // Update score display
+            const scoreCircle = document.getElementById('scoreCircle');
+            const scorePercentage = document.getElementById('scorePercentage');
+            const scoreTitle = document.getElementById('scoreTitle');
+            const scoreDescription = document.getElementById('scoreDescription');
+            
+            scorePercentage.textContent = `${overallPercentage}%`;
+            
+            // Set score category and styling
+            if (overallPercentage >= 90) {
+                scoreCircle.className = 'score-circle score-excellent';
+                scoreTitle.textContent = 'Excellent!';
+                scoreDescription.textContent = 'Outstanding mastery of AWS security concepts!';
+            } else if (overallPercentage >= 75) {
+                scoreCircle.className = 'score-circle score-good';
+                scoreTitle.textContent = 'Well Done!';
+                scoreDescription.textContent = 'Good understanding of AWS security practices.';
+            } else if (overallPercentage >= 60) {
+                scoreCircle.className = 'score-circle score-average';
+                scoreTitle.textContent = 'Getting There!';
+                scoreDescription.textContent = 'You have a foundation, but there\'s room for improvement.';
+            } else {
+                scoreCircle.className = 'score-circle score-poor';
+                scoreTitle.textContent = 'Keep Learning!';
+                scoreDescription.textContent = 'Consider reviewing the AWS security documentation and best practices.';
+            }
+            
+            // Show breakdown
+            showScoreBreakdown();
+            showRecommendations(overallPercentage);
+        }
+
+        function showScoreBreakdown() {
+            const breakdown = document.getElementById('scoreBreakdown');
+            breakdown.innerHTML = '<h3>Section Breakdown:</h3>';
+            
+            Object.entries(sectionScores).forEach(([sectionName, score]) => {
+                const sectionDiv = document.createElement('div');
+                sectionDiv.className = 'section-score';
+                sectionDiv.innerHTML = `
+                    <h4>${sectionName}</h4>
+                    <div class="score-bar">
+                        <div class="score-fill" style="width: ${score.percentage}%"></div>
+                    </div>
+                    <span>${score.score}/${score.total} (${score.percentage}%)</span>
+                `;
+                breakdown.appendChild(sectionDiv);
+            });
+        }
+
+        function showRecommendations(overallPercentage) {
+            const recommendations = document.getElementById('recommendations');
+            let recommendationText = '<h3>Next Steps:</h3><ul>';
+            
+            if (overallPercentage < 60) {
+                recommendationText += '<li>Review AWS Security Best Practices whitepaper</li>';
+                recommendationText += '<li>Complete AWS Security Fundamentals learning path</li>';
+                recommendationText += '<li>Practice with AWS Security workshops</li>';
+                recommendationText += '<li>Focus on IAM and VPC security fundamentals</li>';
+            } else if (overallPercentage < 80) {
+                recommendationText += '<li>Focus on areas with lower scores in the breakdown above</li>';
+                recommendationText += '<li>Explore advanced security services like GuardDuty and Security Hub</li>';
+                recommendationText += '<li>Review AWS Config and compliance frameworks</li>';
+                recommendationText += '<li>Practice with hands-on security labs</li>';
+            } else {
+                recommendationText += '<li>Consider pursuing AWS Security Specialty certification</li>';
+                recommendationText += '<li>Explore advanced threat detection and incident response</li>';
+                recommendationText += '<li>Share your knowledge with others</li>';
+                recommendationText += '<li>Stay updated with new AWS security features and best practices</li>';
+            }
+            
+            recommendationText += '</ul>';
+            recommendations.innerHTML = recommendationText;
+        }
+
+        function restartQuiz() {
+            currentSectionIndex = 0;
+            currentQuestionIndex = 0;
+            userAnswers = {};
+            sectionScores = {};
+            showingJustification = false;
+            
+            // Show quiz content
+            document.querySelector('.quiz-header').style.display = 'block';
+            document.getElementById('questionsContainer').style.display = 'block';
+            document.querySelector('.navigation').style.display = 'block';
+            
+            // Hide score page
+            document.getElementById('scorePage').classList.remove('show');
+            
+            initializeQuiz();
+        }
+
+        // Initialize the quiz when page loads
+        document.addEventListener('DOMContentLoaded', initializeQuiz);
+    </script>
+</body>
+</html>
