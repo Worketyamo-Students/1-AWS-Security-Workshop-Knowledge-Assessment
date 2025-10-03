@@ -415,18 +415,1368 @@
         </div>
     </div>
     <script>
-        // 10 sections, 10 questions each, placeholder content for now
+        // Comprehensive 100-question AWS exam covering 10 major services
         const quizData = [
-            { section: "AWS Aurora", questions: Array.from({length:10}, (_,i)=>({id:i+1,type:"multiple-choice",question:`[Aurora] Placeholder Q${i+1}` ,options:["A","B","C","D"],correct:0,justification:"Aurora explanation."})) },
-            { section: "AWS EC2", questions: Array.from({length:10}, (_,i)=>({id:i+11,type:"multiple-choice",question:`[EC2] Placeholder Q${i+1}` ,options:["A","B","C","D"],correct:0,justification:"EC2 explanation."})) },
-            { section: "AWS Elastic Block Store (EBS)", questions: Array.from({length:10}, (_,i)=>({id:i+21,type:"multiple-choice",question:`[EBS] Placeholder Q${i+1}` ,options:["A","B","C","D"],correct:0,justification:"EBS explanation."})) },
-            { section: "AWS ElastiCache", questions: Array.from({length:10}, (_,i)=>({id:i+31,type:"multiple-choice",question:`[ElastiCache] Placeholder Q${i+1}` ,options:["A","B","C","D"],correct:0,justification:"ElastiCache explanation."})) },
-            { section: "AWS Elastic File System (EFS)", questions: Array.from({length:10}, (_,i)=>({id:i+41,type:"multiple-choice",question:`[EFS] Placeholder Q${i+1}` ,options:["A","B","C","D"],correct:0,justification:"EFS explanation."})) },
-            { section: "AWS IAM", questions: Array.from({length:10}, (_,i)=>({id:i+51,type:"multiple-choice",question:`[IAM] Placeholder Q${i+1}` ,options:["A","B","C","D"],correct:0,justification:"IAM explanation."})) },
-            { section: "AWS RDS", questions: Array.from({length:10}, (_,i)=>({id:i+61,type:"multiple-choice",question:`[RDS] Placeholder Q${i+1}` ,options:["A","B","C","D"],correct:0,justification:"RDS explanation."})) },
-            { section: "AWS Route 53", questions: Array.from({length:10}, (_,i)=>({id:i+71,type:"multiple-choice",question:`[Route 53] Placeholder Q${i+1}` ,options:["A","B","C","D"],correct:0,justification:"Route 53 explanation."})) },
-            { section: "AWS SAA - Worketyamo", questions: Array.from({length:10}, (_,i)=>({id:i+81,type:"multiple-choice",question:`[SAA] Placeholder Q${i+1}` ,options:["A","B","C","D"],correct:0,justification:"SAA explanation."})) },
-            { section: "Elastic Load Balancing (ELB)", questions: Array.from({length:10}, (_,i)=>({id:i+91,type:"multiple-choice",question:`[ELB] Placeholder Q${i+1}` ,options:["A","B","C","D"],correct:0,justification:"ELB explanation."})) }
+            {
+                section: "AWS Aurora",
+                description: "Questions about Amazon Aurora database service, performance, and features",
+                questions: [
+                    {
+                        id: 1,
+                        type: "multiple-choice",
+                        question: "What is Amazon Aurora?",
+                        options: [
+                            "A MySQL and PostgreSQL-compatible relational database built for the cloud",
+                            "A NoSQL database service",
+                            "A data warehousing service",
+                            "A file storage service"
+                        ],
+                        correct: 0,
+                        justification: "Amazon Aurora is a MySQL and PostgreSQL-compatible relational database built for the cloud, combining the performance and availability of traditional enterprise databases with the simplicity and cost-effectiveness of open source databases."
+                    },
+                    {
+                        id: 2,
+                        type: "multiple-choice",
+                        question: "How many copies of your data does Aurora maintain across Availability Zones?",
+                        options: [
+                            "3 copies across 2 AZs",
+                            "6 copies across 3 AZs",
+                            "9 copies across 3 AZs",
+                            "2 copies across 2 AZs"
+                        ],
+                        correct: 1,
+                        justification: "Aurora automatically maintains 6 copies of your data across 3 Availability Zones and continuously backs up your data to Amazon S3."
+                    },
+                    {
+                        id: 3,
+                        type: "multiple-choice",
+                        question: "What is Aurora Serverless?",
+                        options: [
+                            "A traditional provisioned Aurora instance",
+                            "An on-demand, auto-scaling configuration for Aurora",
+                            "A backup service for Aurora",
+                            "A monitoring tool for Aurora"
+                        ],
+                        correct: 1,
+                        justification: "Aurora Serverless is an on-demand, auto-scaling configuration for Aurora where the database automatically starts up, shuts down, and scales capacity up or down based on your application's needs."
+                    },
+                    {
+                        id: 4,
+                        type: "multiple-choice",
+                        question: "What is the maximum storage capacity for Aurora?",
+                        options: [
+                            "64 TB",
+                            "128 TB",
+                            "256 TB",
+                            "Unlimited (up to 128 TB)"
+                        ],
+                        correct: 1,
+                        justification: "Aurora can automatically scale storage from 10 GB up to 128 TB without any impact to database performance."
+                    },
+                    {
+                        id: 5,
+                        type: "multiple-choice",
+                        question: "How many read replicas can Aurora support?",
+                        options: [
+                            "Up to 5",
+                            "Up to 10",
+                            "Up to 15",
+                            "Up to 20"
+                        ],
+                        correct: 2,
+                        justification: "Aurora supports up to 15 read replicas with sub-10ms replica lag."
+                    },
+                    {
+                        id: 6,
+                        type: "multiple-choice",
+                        question: "What is Aurora Global Database?",
+                        options: [
+                            "A local database cluster",
+                            "A cross-region disaster recovery solution",
+                            "A backup service",
+                            "A monitoring service"
+                        ],
+                        correct: 1,
+                        justification: "Aurora Global Database is designed for globally distributed applications, allowing a single Aurora database to span multiple AWS regions with typically less than 1 second cross-region replication latency."
+                    },
+                    {
+                        id: 7,
+                        type: "multiple-choice",
+                        question: "What is the typical failover time for Aurora?",
+                        options: [
+                            "Less than 30 seconds",
+                            "1-2 minutes",
+                            "5-10 minutes",
+                            "15-30 minutes"
+                        ],
+                        correct: 0,
+                        justification: "Aurora is designed to offer greater than 99.99% availability, recovering from physical storage failures in less than 30 seconds and from database crashes in less than 60 seconds."
+                    },
+                    {
+                        id: 8,
+                        type: "multiple-choice",
+                        question: "Which engines are compatible with Aurora?",
+                        options: [
+                            "Only MySQL",
+                            "Only PostgreSQL",
+                            "MySQL and PostgreSQL",
+                            "MySQL, PostgreSQL, and Oracle"
+                        ],
+                        correct: 2,
+                        justification: "Aurora is compatible with MySQL and PostgreSQL, allowing you to run existing database applications and tools without requiring code changes."
+                    },
+                    {
+                        id: 9,
+                        type: "multiple-choice",
+                        question: "What is Aurora Parallel Query?",
+                        options: [
+                            "A feature that distributes query processing across multiple read replicas",
+                            "A feature that pushes down and parallelizes query processing to the storage layer",
+                            "A backup processing feature",
+                            "A monitoring feature"
+                        ],
+                        correct: 1,
+                        justification: "Aurora Parallel Query pushes down and parallelizes query processing to the Aurora storage layer, enabling faster analytics queries on current data."
+                    },
+                    {
+                        id: 10,
+                        type: "multiple-choice",
+                        question: "How is Aurora billed?",
+                        options: [
+                            "Only for compute capacity",
+                            "Only for storage used",
+                            "For compute capacity, storage used, and I/O requests",
+                            "Flat monthly fee"
+                        ],
+                        correct: 2,
+                        justification: "Aurora charges for compute capacity (DB instances), storage used, and I/O requests. You pay only for what you use with no upfront costs."
+                    }
+                ]
+            },
+            {
+                section: "AWS EC2",
+                description: "Questions about Elastic Compute Cloud instances, types, and management",
+                questions: [
+                    {
+                        id: 11,
+                        type: "multiple-choice",
+                        question: "What does EC2 stand for?",
+                        options: [
+                            "Elastic Container Cloud",
+                            "Elastic Compute Cloud",
+                            "Enterprise Computing Cloud",
+                            "Elastic Cloud Computing"
+                        ],
+                        correct: 1,
+                        justification: "EC2 stands for Elastic Compute Cloud, which provides scalable computing capacity in the AWS cloud."
+                    },
+                    {
+                        id: 12,
+                        type: "multiple-choice",
+                        question: "Which EC2 instance type is optimized for compute-intensive tasks?",
+                        options: [
+                            "Memory optimized (R-series)",
+                            "Compute optimized (C-series)",
+                            "Storage optimized (I-series)",
+                            "General purpose (T-series)"
+                        ],
+                        correct: 1,
+                        justification: "C-series instances are compute optimized and ideal for compute-intensive applications that benefit from high-performance processors."
+                    },
+                    {
+                        id: 13,
+                        type: "multiple-choice",
+                        question: "What is an AMI?",
+                        options: [
+                            "Amazon Machine Image - a template for EC2 instances",
+                            "Amazon Memory Interface",
+                            "Automated Management Interface",
+                            "Amazon Monitoring Instance"
+                        ],
+                        correct: 0,
+                        justification: "An Amazon Machine Image (AMI) provides the information required to launch an instance, including the operating system, application server, and applications."
+                    },
+                    {
+                        id: 14,
+                        type: "multiple-choice",
+                        question: "What is the difference between stopping and terminating an EC2 instance?",
+                        options: [
+                            "No difference - both permanently delete the instance",
+                            "Stopping pauses the instance and preserves data; terminating permanently deletes it",
+                            "Stopping is for Windows; terminating is for Linux",
+                            "Stopping costs money; terminating is free"
+                        ],
+                        correct: 1,
+                        justification: "Stopping an instance shuts it down but preserves the instance store and allows you to start it again later. Terminating permanently deletes the instance and its data."
+                    },
+                    {
+                        id: 15,
+                        type: "multiple-choice",
+                        question: "What is EC2 Spot pricing?",
+                        options: [
+                            "Fixed pricing for long-term commitments",
+                            "Pricing that varies based on supply and demand",
+                            "Free tier pricing",
+                            "Premium support pricing"
+                        ],
+                        correct: 1,
+                        justification: "Spot instances allow you to bid on spare Amazon EC2 computing capacity at potentially significant cost savings, with prices that fluctuate based on supply and demand."
+                    },
+                    {
+                        id: 16,
+                        type: "multiple-choice",
+                        question: "What is a Security Group in EC2?",
+                        options: [
+                            "A physical security measure",
+                            "A virtual firewall that controls traffic to instances",
+                            "A group of IAM users",
+                            "A backup group"
+                        ],
+                        correct: 1,
+                        justification: "A security group acts as a virtual firewall for your instance to control inbound and outbound traffic at the instance level."
+                    },
+                    {
+                        id: 17,
+                        type: "multiple-choice",
+                        question: "What is EC2 Auto Scaling?",
+                        options: [
+                            "Automatic instance type changes",
+                            "Automatic capacity scaling based on demand",
+                            "Automatic AMI updates",
+                            "Automatic security updates"
+                        ],
+                        correct: 1,
+                        justification: "EC2 Auto Scaling helps maintain application availability and allows you to automatically add or remove EC2 instances according to conditions you define."
+                    },
+                    {
+                        id: 18,
+                        type: "multiple-choice",
+                        question: "What is the maximum number of EC2 instances you can run by default?",
+                        options: [
+                            "10 instances",
+                            "20 instances",
+                            "50 instances",
+                            "Unlimited"
+                        ],
+                        correct: 1,
+                        justification: "By default, AWS limits you to 20 running EC2 instances per region, though you can request an increase through AWS Support."
+                    },
+                    {
+                        id: 19,
+                        type: "multiple-choice",
+                        question: "What is EC2 Dedicated Hosts?",
+                        options: [
+                            "Instances with dedicated CPU cores",
+                            "Physical servers dedicated to your use",
+                            "High-performance instances",
+                            "Instances in private subnets"
+                        ],
+                        correct: 1,
+                        justification: "Dedicated Hosts are physical servers with EC2 instance capacity fully dedicated to your use, helping address compliance requirements and reduce costs by allowing you to use your existing software licenses."
+                    },
+                    {
+                        id: 20,
+                        type: "multiple-choice",
+                        question: "What is User Data in EC2?",
+                        options: [
+                            "User account information",
+                            "Scripts that run when an instance first starts",
+                            "Instance metadata",
+                            "User permissions"
+                        ],
+                        correct: 1,
+                        justification: "User Data allows you to pass data to your instance when it launches, commonly used to run configuration scripts or install software automatically."
+                    }
+                ]
+            },
+            {
+                section: "AWS Elastic Block Store (EBS)",
+                description: "Questions about EBS volumes, types, and storage options",
+                questions: [
+                    {
+                        id: 21,
+                        type: "multiple-choice",
+                        question: "What is Amazon EBS?",
+                        options: [
+                            "A file storage service",
+                            "A block storage service for EC2 instances",
+                            "A database service",
+                            "A content delivery network"
+                        ],
+                        correct: 1,
+                        justification: "Amazon Elastic Block Store (EBS) provides persistent block storage volumes for use with Amazon EC2 instances."
+                    },
+                    {
+                        id: 22,
+                        type: "multiple-choice",
+                        question: "Which EBS volume type provides the highest IOPS performance?",
+                        options: [
+                            "General Purpose SSD (gp3)",
+                            "Provisioned IOPS SSD (io2)",
+                            "Throughput Optimized HDD (st1)",
+                            "Cold HDD (sc1)"
+                        ],
+                        correct: 1,
+                        justification: "Provisioned IOPS SSD (io2) volumes are designed for I/O-intensive applications and can deliver up to 64,000 IOPS per volume."
+                    },
+                    {
+                        id: 23,
+                        type: "multiple-choice",
+                        question: "What is the maximum size for an EBS volume?",
+                        options: [
+                            "1 TB",
+                            "16 TB",
+                            "64 TB",
+                            "1 PB"
+                        ],
+                        correct: 2,
+                        justification: "EBS volumes can be up to 64 TB in size, depending on the volume type."
+                    },
+                    {
+                        id: 24,
+                        type: "multiple-choice",
+                        question: "What happens to EBS root volumes when an EC2 instance is terminated by default?",
+                        options: [
+                            "They are automatically backed up",
+                            "They are deleted",
+                            "They are preserved",
+                            "They are moved to S3"
+                        ],
+                        correct: 1,
+                        justification: "By default, EBS root volumes are deleted when the EC2 instance is terminated, though this behavior can be changed."
+                    },
+                    {
+                        id: 25,
+                        type: "multiple-choice",
+                        question: "What is EBS Multi-Attach?",
+                        options: [
+                            "Attaching multiple volumes to one instance",
+                            "Attaching one volume to multiple instances simultaneously",
+                            "Creating multiple snapshots",
+                            "Backing up to multiple regions"
+                        ],
+                        correct: 1,
+                        justification: "EBS Multi-Attach enables you to attach a single Provisioned IOPS SSD volume to multiple instances that are in the same Availability Zone simultaneously."
+                    },
+                    {
+                        id: 26,
+                        type: "multiple-choice",
+                        question: "What is an EBS snapshot?",
+                        options: [
+                            "A real-time backup",
+                            "A point-in-time backup stored in S3",
+                            "A volume type",
+                            "A monitoring metric"
+                        ],
+                        correct: 1,
+                        justification: "EBS snapshots are point-in-time backups of EBS volumes that are stored in Amazon S3 and can be used to create new volumes or restore data."
+                    },
+                    {
+                        id: 27,
+                        type: "multiple-choice",
+                        question: "Which EBS volume type is most cost-effective for infrequently accessed data?",
+                        options: [
+                            "General Purpose SSD (gp3)",
+                            "Provisioned IOPS SSD (io2)",
+                            "Throughput Optimized HDD (st1)",
+                            "Cold HDD (sc1)"
+                        ],
+                        correct: 3,
+                        justification: "Cold HDD (sc1) volumes provide the lowest cost per GB and are designed for less frequently accessed workloads."
+                    },
+                    {
+                        id: 28,
+                        type: "multiple-choice",
+                        question: "Can you change the volume type of an existing EBS volume?",
+                        options: [
+                            "No, you must create a new volume",
+                            "Yes, but only during instance launch",
+                            "Yes, you can modify volume type without downtime",
+                            "Yes, but only with instance restart"
+                        ],
+                        correct: 2,
+                        justification: "You can modify EBS volume type, size, and IOPS capacity without detaching the volume or restarting the instance."
+                    },
+                    {
+                        id: 29,
+                        type: "multiple-choice",
+                        question: "What is EBS encryption?",
+                        options: [
+                            "Encryption only for data in transit",
+                            "Encryption only for data at rest",
+                            "Encryption for data at rest, in transit, and snapshots",
+                            "Encryption is not available for EBS"
+                        ],
+                        correct: 2,
+                        justification: "EBS encryption offers seamless encryption of data at rest, data in transit between instances and volumes, and all snapshots created from encrypted volumes."
+                    },
+                    {
+                        id: 30,
+                        type: "multiple-choice",
+                        question: "What is the difference between EBS and Instance Store?",
+                        options: [
+                            "No difference",
+                            "EBS is persistent, Instance Store is temporary",
+                            "EBS is faster than Instance Store",
+                            "Instance Store is more expensive"
+                        ],
+                        correct: 1,
+                        justification: "EBS provides persistent, network-attached storage that persists independently from EC2 instances, while Instance Store provides temporary storage that is lost when the instance stops or terminates."
+                    }
+                ]
+            },
+            {
+                section: "AWS ElastiCache",
+                description: "Questions about in-memory caching service and performance optimization",
+                questions: [
+                    {
+                        id: 31,
+                        type: "multiple-choice",
+                        question: "What is Amazon ElastiCache?",
+                        options: [
+                            "A database service",
+                            "An in-memory caching service",
+                            "A file storage service",
+                            "A content delivery network"
+                        ],
+                        correct: 1,
+                        justification: "Amazon ElastiCache is a fully managed in-memory caching service that supports Redis and Memcached engines."
+                    },
+                    {
+                        id: 32,
+                        type: "multiple-choice",
+                        question: "Which caching engines does ElastiCache support?",
+                        options: [
+                            "Only Redis",
+                            "Only Memcached",
+                            "Redis and Memcached",
+                            "Redis, Memcached, and Hazelcast"
+                        ],
+                        correct: 2,
+                        justification: "ElastiCache supports two popular open-source in-memory caching engines: Redis and Memcached."
+                    },
+                    {
+                        id: 33,
+                        type: "multiple-choice",
+                        question: "What is the primary benefit of using ElastiCache?",
+                        options: [
+                            "Increased storage capacity",
+                            "Improved application performance through faster data access",
+                            "Enhanced security",
+                            "Reduced network costs"
+                        ],
+                        correct: 1,
+                        justification: "ElastiCache improves application performance by providing microsecond latency data access from memory instead of slower disk-based databases."
+                    },
+                    {
+                        id: 34,
+                        type: "multiple-choice",
+                        question: "Which ElastiCache engine supports data persistence?",
+                        options: [
+                            "Only Memcached",
+                            "Only Redis",
+                            "Both Redis and Memcached",
+                            "Neither engine supports persistence"
+                        ],
+                        correct: 1,
+                        justification: "Redis supports data persistence through snapshots and append-only files (AOF), while Memcached is purely in-memory with no persistence."
+                    },
+                    {
+                        id: 35,
+                        type: "multiple-choice",
+                        question: "What is ElastiCache for Redis replication?",
+                        options: [
+                            "Automatic data backup",
+                            "Creating read replicas for improved read performance",
+                            "Data compression",
+                            "Security enhancement"
+                        ],
+                        correct: 1,
+                        justification: "ElastiCache for Redis supports replication where you can create read replicas to scale read performance and provide high availability."
+                    },
+                    {
+                        id: 36,
+                        type: "multiple-choice",
+                        question: "What is Redis Cluster mode?",
+                        options: [
+                            "A single-node configuration",
+                            "A multi-node configuration that enables partitioning data across multiple shards",
+                            "A backup mode",
+                            "A security mode"
+                        ],
+                        correct: 1,
+                        justification: "Redis Cluster mode enables you to partition your data across multiple shards, providing both horizontal scaling and high availability."
+                    },
+                    {
+                        id: 37,
+                        type: "multiple-choice",
+                        question: "Which ElastiCache engine is better for simple caching use cases?",
+                        options: [
+                            "Redis",
+                            "Memcached",
+                            "Both are equally suitable",
+                            "Neither is suitable"
+                        ],
+                        correct: 1,
+                        justification: "Memcached is often preferred for simple caching use cases due to its simplicity, while Redis is better for complex data structures and advanced features."
+                    },
+                    {
+                        id: 38,
+                        type: "multiple-choice",
+                        question: "What is ElastiCache automatic failover?",
+                        options: [
+                            "Automatic cache clearing",
+                            "Automatic promotion of read replica to primary when primary fails",
+                            "Automatic scaling",
+                            "Automatic backup"
+                        ],
+                        correct: 1,
+                        justification: "Automatic failover automatically promotes a read replica to primary when the primary node fails, minimizing downtime."
+                    },
+                    {
+                        id: 39,
+                        type: "multiple-choice",
+                        question: "How is ElastiCache secured within a VPC?",
+                        options: [
+                            "Through public internet access only",
+                            "Through security groups and subnet groups",
+                            "No security is provided",
+                            "Only through IAM policies"
+                        ],
+                        correct: 1,
+                        justification: "ElastiCache can be launched in a VPC and secured using security groups and subnet groups to control network access."
+                    },
+                    {
+                        id: 40,
+                        type: "multiple-choice",
+                        question: "What types of data structures does Redis support that Memcached doesn't?",
+                        options: [
+                            "Only strings",
+                            "Strings, lists, sets, sorted sets, and hashes",
+                            "Only numbers",
+                            "No difference in data structures"
+                        ],
+                        correct: 1,
+                        justification: "Redis supports rich data structures including strings, lists, sets, sorted sets, and hashes, while Memcached primarily supports simple key-value pairs."
+                    }
+                ]
+            },
+            {
+                section: "AWS Elastic File System (EFS)",
+                description: "Questions about fully managed NFS file system for EC2",
+                questions: [
+                    {
+                        id: 41,
+                        type: "multiple-choice",
+                        question: "What is Amazon EFS?",
+                        options: [
+                            "A block storage service",
+                            "A fully managed NFS file system",
+                            "A database service",
+                            "An object storage service"
+                        ],
+                        correct: 1,
+                        justification: "Amazon Elastic File System (EFS) provides a simple, scalable, fully managed elastic NFS file system for use with AWS services."
+                    },
+                    {
+                        id: 42,
+                        type: "multiple-choice",
+                        question: "How many EC2 instances can simultaneously access an EFS file system?",
+                        options: [
+                            "Only 1 instance",
+                            "Up to 10 instances",
+                            "Up to 100 instances",
+                            "Thousands of instances concurrently"
+                        ],
+                        correct: 3,
+                        justification: "EFS is designed to support thousands of concurrent EC2 instances, providing shared access to files across multiple instances."
+                    },
+                    {
+                        id: 43,
+                        type: "multiple-choice",
+                        question: "What are the two performance modes available for EFS?",
+                        options: [
+                            "Standard and Premium",
+                            "General Purpose and Max I/O",
+                            "Fast and Slow",
+                            "Basic and Advanced"
+                        ],
+                        correct: 1,
+                        justification: "EFS offers General Purpose mode (lower latency) and Max I/O mode (higher aggregate throughput and operations per second) performance modes."
+                    },
+                    {
+                        id: 44,
+                        type: "multiple-choice",
+                        question: "What are the two throughput modes for EFS?",
+                        options: [
+                            "Bursting and Provisioned",
+                            "Standard and Premium",
+                            "Fast and Standard",
+                            "Basic and Enhanced"
+                        ],
+                        correct: 0,
+                        justification: "EFS provides Bursting throughput mode (scales with file system size) and Provisioned throughput mode (you specify the throughput independent of storage size)."
+                    },
+                    {
+                        id: 45,
+                        type: "multiple-choice",
+                        question: "Which storage classes does EFS offer?",
+                        options: [
+                            "Only Standard",
+                            "Standard and Infrequent Access (IA)",
+                            "Hot, Warm, and Cold",
+                            "Premium and Basic"
+                        ],
+                        correct: 1,
+                        justification: "EFS offers Standard storage class for frequently accessed files and Infrequent Access (IA) storage class for cost optimization of files not accessed daily."
+                    },
+                    {
+                        id: 46,
+                        type: "multiple-choice",
+                        question: "How does EFS pricing work?",
+                        options: [
+                            "Fixed monthly fee",
+                            "Pay only for the storage you use",
+                            "Based on number of instances accessing it",
+                            "Based on throughput only"
+                        ],
+                        correct: 1,
+                        justification: "EFS pricing is based on the amount of storage you use, with no minimum fee or setup costs. You pay only for the storage you use."
+                    },
+                    {
+                        id: 47,
+                        type: "multiple-choice",
+                        question: "Can EFS be accessed from on-premises?",
+                        options: [
+                            "No, only from EC2 instances",
+                            "Yes, via AWS Direct Connect or VPN",
+                            "Yes, via public internet only",
+                            "Only through AWS Storage Gateway"
+                        ],
+                        correct: 1,
+                        justification: "EFS can be accessed from on-premises servers via AWS Direct Connect or AWS VPN, enabling hybrid architectures."
+                    },
+                    {
+                        id: 48,
+                        type: "multiple-choice",
+                        question: "What is EFS Lifecycle Management?",
+                        options: [
+                            "Automatic file deletion",
+                            "Automatic transition of files to IA storage class based on access patterns",
+                            "File versioning",
+                            "File compression"
+                        ],
+                        correct: 1,
+                        justification: "EFS Lifecycle Management automatically moves files to the IA storage class when they haven't been accessed for a period you specify (7, 14, 30, 60, or 90 days)."
+                    },
+                    {
+                        id: 49,
+                        type: "multiple-choice",
+                        question: "Is EFS regional or zonal?",
+                        options: [
+                            "Zonal - only available in one AZ",
+                            "Regional - available across multiple AZs in a region",
+                            "Global - available across all regions",
+                            "Instance-specific"
+                        ],
+                        correct: 1,
+                        justification: "EFS is a regional service that stores data redundantly across multiple Availability Zones within a region, providing high availability and durability."
+                    },
+                    {
+                        id: 50,
+                        type: "multiple-choice",
+                        question: "What encryption options does EFS provide?",
+                        options: [
+                            "No encryption available",
+                            "Only encryption at rest",
+                            "Only encryption in transit",
+                            "Both encryption at rest and in transit"
+                        ],
+                        correct: 3,
+                        justification: "EFS provides encryption at rest using AWS KMS and encryption in transit using TLS, ensuring data security both when stored and when being transferred."
+                    }
+                ]
+            },
+            {
+                section: "AWS IAM",
+                description: "Questions about Identity and Access Management, policies, and security",
+                questions: [
+                    {
+                        id: 51,
+                        type: "multiple-choice",
+                        question: "What does IAM stand for?",
+                        options: [
+                            "Internet Access Management",
+                            "Identity and Access Management",
+                            "Infrastructure Access Management",
+                            "Integrated Application Management"
+                        ],
+                        correct: 1,
+                        justification: "IAM stands for Identity and Access Management, which helps you securely control access to AWS services and resources."
+                    },
+                    {
+                        id: 52,
+                        type: "multiple-choice",
+                        question: "What is the principle of least privilege?",
+                        options: [
+                            "Give users maximum permissions",
+                            "Give users only the minimum permissions they need",
+                            "Give all users the same permissions",
+                            "Never give users any permissions"
+                        ],
+                        correct: 1,
+                        justification: "The principle of least privilege means granting users only the minimum permissions necessary to perform their job functions."
+                    },
+                    {
+                        id: 53,
+                        type: "multiple-choice",
+                        question: "What is an IAM role?",
+                        options: [
+                            "A permanent user account",
+                            "An identity with permissions that can be assumed temporarily",
+                            "A group of users",
+                            "A type of password policy"
+                        ],
+                        correct: 1,
+                        justification: "An IAM role is an identity with specific permissions that can be assumed temporarily by users, applications, or services."
+                    },
+                    {
+                        id: 54,
+                        type: "multiple-choice",
+                        question: "What is the difference between IAM users and IAM roles?",
+                        options: [
+                            "No difference",
+                            "Users have permanent credentials, roles provide temporary credentials",
+                            "Roles are only for humans, users are for applications",
+                            "Users are more secure than roles"
+                        ],
+                        correct: 1,
+                        justification: "IAM users have permanent long-term credentials, while IAM roles provide temporary security credentials that are assumed when needed."
+                    },
+                    {
+                        id: 55,
+                        type: "multiple-choice",
+                        question: "What is an IAM policy?",
+                        options: [
+                            "A billing document",
+                            "A JSON document that defines permissions",
+                            "A user agreement",
+                            "A security certificate"
+                        ],
+                        correct: 1,
+                        justification: "An IAM policy is a JSON document that defines what actions are allowed or denied on which AWS resources."
+                    },
+                    {
+                        id: 56,
+                        type: "multiple-choice",
+                        question: "What is Multi-Factor Authentication (MFA)?",
+                        options: [
+                            "Using multiple passwords",
+                            "An additional layer of security requiring a second form of authentication",
+                            "Multiple user accounts",
+                            "Multiple regions for access"
+                        ],
+                        correct: 1,
+                        justification: "MFA adds an extra layer of security by requiring users to provide a second form of authentication in addition to their password."
+                    },
+                    {
+                        id: 57,
+                        type: "multiple-choice",
+                        question: "What is IAM Access Analyzer?",
+                        options: [
+                            "A tool to create policies",
+                            "A tool to identify resources shared with external entities",
+                            "A tool to manage users",
+                            "A tool to rotate passwords"
+                        ],
+                        correct: 1,
+                        justification: "IAM Access Analyzer helps identify resources in your organization that are shared with external entities, helping you ensure intended access."
+                    },
+                    {
+                        id: 58,
+                        type: "multiple-choice",
+                        question: "What is the IAM root user?",
+                        options: [
+                            "A regular user with admin permissions",
+                            "The account owner with complete access to all AWS services",
+                            "A service account",
+                            "An emergency access account"
+                        ],
+                        correct: 1,
+                        justification: "The root user is the account owner with complete access to all AWS services and resources. It should be used sparingly and secured with MFA."
+                    },
+                    {
+                        id: 59,
+                        type: "multiple-choice",
+                        question: "What are IAM groups used for?",
+                        options: [
+                            "Organizing AWS resources",
+                            "Organizing users and applying common permissions",
+                            "Creating backup policies",
+                            "Managing billing"
+                        ],
+                        correct: 1,
+                        justification: "IAM groups are collections of users that share common permissions, making it easier to manage permissions for multiple users."
+                    },
+                    {
+                        id: 60,
+                        type: "multiple-choice",
+                        question: "What is cross-account access in IAM?",
+                        options: [
+                            "Accessing resources within the same account",
+                            "Allowing users from one AWS account to access resources in another account",
+                            "Accessing resources across regions",
+                            "Sharing billing information"
+                        ],
+                        correct: 1,
+                        justification: "Cross-account access allows users or services from one AWS account to securely access resources in another AWS account using IAM roles."
+                    }
+                ]
+            },
+            {
+                section: "AWS RDS",
+                description: "Questions about Relational Database Service and managed databases",
+                questions: [
+                    {
+                        id: 61,
+                        type: "multiple-choice",
+                        question: "What does RDS stand for?",
+                        options: [
+                            "Rapid Database Service",
+                            "Relational Database Service",
+                            "Remote Database System",
+                            "Redundant Data Storage"
+                        ],
+                        correct: 1,
+                        justification: "RDS stands for Relational Database Service, which makes it easy to set up, operate, and scale relational databases in the cloud."
+                    },
+                    {
+                        id: 62,
+                        type: "multiple-choice",
+                        question: "Which database engines does RDS support?",
+                        options: [
+                            "Only MySQL",
+                            "MySQL, PostgreSQL, Oracle, SQL Server, MariaDB, and Aurora",
+                            "Only open-source databases",
+                            "Only commercial databases"
+                        ],
+                        correct: 1,
+                        justification: "RDS supports six database engines: Amazon Aurora, PostgreSQL, MySQL, MariaDB, Oracle Database, and Microsoft SQL Server."
+                    },
+                    {
+                        id: 63,
+                        type: "multiple-choice",
+                        question: "What is RDS Multi-AZ deployment?",
+                        options: [
+                            "Running multiple databases",
+                            "Automatic failover to a standby instance in another AZ",
+                            "Load balancing across AZs",
+                            "Backup storage across AZs"
+                        ],
+                        correct: 1,
+                        justification: "Multi-AZ deployment provides high availability by automatically maintaining a standby replica in another Availability Zone and failing over if needed."
+                    },
+                    {
+                        id: 64,
+                        type: "multiple-choice",
+                        question: "What are RDS Read Replicas used for?",
+                        options: [
+                            "Disaster recovery only",
+                            "Scaling read performance and reducing load on primary database",
+                            "Backup storage",
+                            "Data archiving"
+                        ],
+                        correct: 1,
+                        justification: "Read Replicas allow you to create read-only copies of your database to scale read performance and reduce load on the primary database."
+                    },
+                    {
+                        id: 65,
+                        type: "multiple-choice",
+                        question: "What is automated backup in RDS?",
+                        options: [
+                            "Manual backup only",
+                            "Automatic daily backups with point-in-time recovery",
+                            "Backup to local storage only",
+                            "No backup capability"
+                        ],
+                        correct: 1,
+                        justification: "RDS automatically backs up your database and provides point-in-time recovery, allowing you to restore to any second during your retention period."
+                    },
+                    {
+                        id: 66,
+                        type: "multiple-choice",
+                        question: "What is the maximum backup retention period for RDS?",
+                        options: [
+                            "7 days",
+                            "30 days",
+                            "35 days",
+                            "90 days"
+                        ],
+                        correct: 2,
+                        justification: "RDS automated backups can be retained for up to 35 days, with the default being 7 days."
+                    },
+                    {
+                        id: 67,
+                        type: "multiple-choice",
+                        question: "What is RDS encryption?",
+                        options: [
+                            "Encryption of connections only",
+                            "Encryption at rest using AWS KMS",
+                            "No encryption available",
+                            "Application-level encryption only"
+                        ],
+                        correct: 1,
+                        justification: "RDS supports encryption at rest using AWS Key Management Service (KMS), encrypting the underlying storage, backups, and read replicas."
+                    },
+                    {
+                        id: 68,
+                        type: "multiple-choice",
+                        question: "Can you access the underlying operating system of RDS instances?",
+                        options: [
+                            "Yes, full SSH access is provided",
+                            "No, RDS is a managed service",
+                            "Only for Oracle databases",
+                            "Only through AWS Support"
+                        ],
+                        correct: 1,
+                        justification: "RDS is a fully managed service where AWS handles the underlying infrastructure, so you cannot access the operating system directly."
+                    },
+                    {
+                        id: 69,
+                        type: "multiple-choice",
+                        question: "What is RDS Performance Insights?",
+                        options: [
+                            "A backup tool",
+                            "A database performance monitoring and analysis tool",
+                            "A security scanning tool",
+                            "A cost optimization tool"
+                        ],
+                        correct: 1,
+                        justification: "Performance Insights is a database performance monitoring feature that helps you quickly assess the load on your database and determine when and where to take action."
+                    },
+                    {
+                        id: 70,
+                        type: "multiple-choice",
+                        question: "What happens during RDS maintenance windows?",
+                        options: [
+                            "Database is permanently shut down",
+                            "Patches and updates are applied, potentially causing brief downtime",
+                            "Data is deleted",
+                            "Nothing happens"
+                        ],
+                        correct: 1,
+                        justification: "During maintenance windows, AWS applies patches and updates to the RDS instance, which may cause brief downtime but ensures security and performance improvements."
+                    }
+                ]
+            },
+            {
+                section: "AWS Route 53",
+                description: "Questions about DNS service and domain name management",
+                questions: [
+                    {
+                        id: 71,
+                        type: "multiple-choice",
+                        question: "What is Amazon Route 53?",
+                        options: [
+                            "A content delivery network",
+                            "A scalable Domain Name System (DNS) web service",
+                            "A load balancing service",
+                            "A security service"
+                        ],
+                        correct: 1,
+                        justification: "Amazon Route 53 is a highly available and scalable cloud DNS web service designed to route end users to internet applications."
+                    },
+                    {
+                        id: 72,
+                        type: "multiple-choice",
+                        question: "What are the main functions of Route 53?",
+                        options: [
+                            "Only domain registration",
+                            "Domain registration, DNS routing, and health checking",
+                            "Only DNS routing",
+                            "Only health checking"
+                        ],
+                        correct: 1,
+                        justification: "Route 53 provides three main functions: domain registration, DNS routing, and health checking of resources."
+                    },
+                    {
+                        id: 73,
+                        type: "multiple-choice",
+                        question: "What are Route 53 hosted zones?",
+                        options: [
+                            "Physical DNS servers",
+                            "Containers for DNS records for a particular domain",
+                            "Security groups for DNS",
+                            "Backup locations for domains"
+                        ],
+                        correct: 1,
+                        justification: "A hosted zone is a container for DNS records for a particular domain, telling Route 53 how to respond to DNS queries for that domain."
+                    },
+                    {
+                        id: 74,
+                        type: "multiple-choice",
+                        question: "What routing policies does Route 53 support?",
+                        options: [
+                            "Only simple routing",
+                            "Simple, weighted, latency-based, failover, geolocation, and multivalue",
+                            "Only geographic routing",
+                            "Only load-based routing"
+                        ],
+                        correct: 1,
+                        justification: "Route 53 supports multiple routing policies: simple, weighted, latency-based, failover, geolocation, geoproximity, and multivalue answer routing."
+                    },
+                    {
+                        id: 75,
+                        type: "multiple-choice",
+                        question: "What is Route 53 health checking?",
+                        options: [
+                            "Checking DNS server health only",
+                            "Monitoring the health and performance of resources and routing traffic accordingly",
+                            "Monitoring domain expiration",
+                            "Checking SSL certificate status"
+                        ],
+                        correct: 1,
+                        justification: "Route 53 health checks monitor the health and performance of your resources and can automatically route traffic away from unhealthy resources."
+                    },
+                    {
+                        id: 76,
+                        type: "multiple-choice",
+                        question: "What is weighted routing in Route 53?",
+                        options: [
+                            "Routing based on server weight",
+                            "Distributing traffic across multiple resources based on assigned weights",
+                            "Routing based on geographic weight",
+                            "Prioritizing traffic by importance"
+                        ],
+                        correct: 1,
+                        justification: "Weighted routing lets you associate multiple resources with a single domain name and specify a weight for each resource to determine the proportion of traffic routed to each."
+                    },
+                    {
+                        id: 77,
+                        type: "multiple-choice",
+                        question: "What is latency-based routing?",
+                        options: [
+                            "Routing based on server load",
+                            "Routing traffic to the resource that provides the lowest latency",
+                            "Routing based on time of day",
+                            "Random traffic distribution"
+                        ],
+                        correct: 1,
+                        justification: "Latency-based routing routes traffic to the AWS region that provides the lowest latency for your users."
+                    },
+                    {
+                        id: 78,
+                        type: "multiple-choice",
+                        question: "What is geolocation routing?",
+                        options: [
+                            "Routing based on server location",
+                            "Routing traffic based on the geographic location of users",
+                            "Routing based on GPS coordinates",
+                            "Routing based on timezone"
+                        ],
+                        correct: 1,
+                        justification: "Geolocation routing lets you route traffic based on the geographic location of your users, allowing you to serve localized content."
+                    },
+                    {
+                        id: 79,
+                        type: "multiple-choice",
+                        question: "What is Route 53 Resolver?",
+                        options: [
+                            "A domain registration service",
+                            "A DNS service that provides recursive DNS resolution for VPCs",
+                            "A security service",
+                            "A monitoring service"
+                        ],
+                        correct: 1,
+                        justification: "Route 53 Resolver provides recursive DNS resolution for Amazon VPCs, enabling resolution of DNS queries between VPCs and on-premises networks."
+                    },
+                    {
+                        id: 80,
+                        type: "multiple-choice",
+                        question: "What is the significance of the name 'Route 53'?",
+                        options: [
+                            "It was the 53rd AWS service",
+                            "Named after port 53, which is used by DNS",
+                            "It can handle 53 million queries",
+                            "It was created in 1953"
+                        ],
+                        correct: 1,
+                        justification: "Route 53 is named after port 53, which is the port number used by the DNS protocol for DNS queries."
+                    }
+                ]
+            },
+            {
+                section: "AWS SAA - Solutions Architect Associate",
+                description: "Questions covering core SAA exam concepts and architectural best practices",
+                questions: [
+                    {
+                        id: 81,
+                        type: "multiple-choice",
+                        question: "What are the five pillars of the AWS Well-Architected Framework?",
+                        options: [
+                            "Cost, Security, Performance, Reliability, Operations",
+                            "Operational Excellence, Security, Reliability, Performance Efficiency, Cost Optimization",
+                            "Scalability, Security, Cost, Performance, Availability",
+                            "Design, Security, Operations, Cost, Performance"
+                        ],
+                        correct: 1,
+                        justification: "The five pillars are: Operational Excellence, Security, Reliability, Performance Efficiency, and Cost Optimization."
+                    },
+                    {
+                        id: 82,
+                        type: "multiple-choice",
+                        question: "What is the shared responsibility model?",
+                        options: [
+                            "AWS is responsible for everything",
+                            "Customer is responsible for everything",
+                            "AWS secures the infrastructure, customer secures what they put in the cloud",
+                            "Responsibilities are shared equally"
+                        ],
+                        correct: 2,
+                        justification: "AWS is responsible for security 'of' the cloud (infrastructure), while customers are responsible for security 'in' the cloud (their data, applications, and configurations)."
+                    },
+                    {
+                        id: 83,
+                        type: "multiple-choice",
+                        question: "What is the principle of designing for failure?",
+                        options: [
+                            "Expecting systems to never fail",
+                            "Building systems that can handle component failures gracefully",
+                            "Using only the most expensive components",
+                            "Avoiding redundancy to reduce costs"
+                        ],
+                        correct: 1,
+                        justification: "Design for failure means building systems that anticipate and handle component failures through redundancy, automatic recovery, and graceful degradation."
+                    },
+                    {
+                        id: 84,
+                        type: "multiple-choice",
+                        question: "What is horizontal scaling vs vertical scaling?",
+                        options: [
+                            "No difference between them",
+                            "Horizontal is adding more power, vertical is adding more instances",
+                            "Horizontal is adding more instances, vertical is adding more power to existing instances",
+                            "Both refer to the same concept"
+                        ],
+                        correct: 2,
+                        justification: "Horizontal scaling (scaling out) adds more instances, while vertical scaling (scaling up) increases the power of existing instances."
+                    },
+                    {
+                        id: 85,
+                        type: "multiple-choice",
+                        question: "What is the difference between RTO and RPO?",
+                        options: [
+                            "No difference",
+                            "RTO is Recovery Time Objective (downtime), RPO is Recovery Point Objective (data loss)",
+                            "RTO is for data, RPO is for time",
+                            "They are the same metric"
+                        ],
+                        correct: 1,
+                        justification: "RTO (Recovery Time Objective) is the maximum acceptable downtime, while RPO (Recovery Point Objective) is the maximum acceptable data loss measured in time."
+                    },
+                    {
+                        id: 86,
+                        type: "multiple-choice",
+                        question: "What is loose coupling in architecture?",
+                        options: [
+                            "Components are tightly integrated",
+                            "Components are independent and communicate through well-defined interfaces",
+                            "All components run on the same server",
+                            "Components share the same database"
+                        ],
+                        correct: 1,
+                        justification: "Loose coupling means components are independent and interact through well-defined interfaces, reducing dependencies and improving scalability."
+                    },
+                    {
+                        id: 87,
+                        type: "multiple-choice",
+                        question: "What is the difference between stateful and stateless architecture?",
+                        options: [
+                            "No difference",
+                            "Stateful retains information between requests, stateless does not",
+                            "Stateless is always better",
+                            "Stateful is only for databases"
+                        ],
+                        correct: 1,
+                        justification: "Stateful applications retain information between requests, while stateless applications don't store session information, making them more scalable."
+                    },
+                    {
+                        id: 88,
+                        type: "multiple-choice",
+                        question: "What is the purpose of caching in architecture?",
+                        options: [
+                            "To increase storage capacity",
+                            "To improve performance by storing frequently accessed data in faster storage",
+                            "To increase security",
+                            "To reduce network bandwidth only"
+                        ],
+                        correct: 1,
+                        justification: "Caching improves performance by storing frequently accessed data in faster, more accessible storage layers to reduce latency and load on backend systems."
+                    },
+                    {
+                        id: 89,
+                        type: "multiple-choice",
+                        question: "What is disaster recovery strategy?",
+                        options: [
+                            "Only backing up data",
+                            "A plan to recover IT systems and data after a disaster",
+                            "Only having redundant systems",
+                            "Insurance for IT equipment"
+                        ],
+                        correct: 1,
+                        justification: "Disaster recovery is a comprehensive strategy that includes processes, policies, and procedures to recover or continue vital technology infrastructure after a disaster."
+                    },
+                    {
+                        id: 90,
+                        type: "multiple-choice",
+                        question: "What is the principle of immutable infrastructure?",
+                        options: [
+                            "Infrastructure that never changes",
+                            "Infrastructure that is replaced rather than modified",
+                            "Infrastructure that cannot be deleted",
+                            "Infrastructure that is very expensive"
+                        ],
+                        correct: 1,
+                        justification: "Immutable infrastructure means replacing infrastructure components rather than modifying them, leading to more predictable and reliable deployments."
+                    }
+                ]
+            },
+            {
+                section: "Elastic Load Balancing (ELB)",
+                description: "Questions about load balancing and traffic distribution",
+                questions: [
+                    {
+                        id: 91,
+                        type: "multiple-choice",
+                        question: "What is Elastic Load Balancing (ELB)?",
+                        options: [
+                            "A database service",
+                            "A service that distributes incoming traffic across multiple targets",
+                            "A monitoring service",
+                            "A storage service"
+                        ],
+                        correct: 1,
+                        justification: "Elastic Load Balancing automatically distributes incoming application traffic across multiple targets, such as EC2 instances, containers, and IP addresses."
+                    },
+                    {
+                        id: 92,
+                        type: "multiple-choice",
+                        question: "What are the three types of load balancers in AWS?",
+                        options: [
+                            "Basic, Standard, Premium",
+                            "Application Load Balancer, Network Load Balancer, Gateway Load Balancer",
+                            "Internal, External, Hybrid",
+                            "HTTP, TCP, UDP"
+                        ],
+                        correct: 1,
+                        justification: "AWS offers three types of load balancers: Application Load Balancer (Layer 7), Network Load Balancer (Layer 4), and Gateway Load Balancer."
+                    },
+                    {
+                        id: 93,
+                        type: "multiple-choice",
+                        question: "What OSI layer does Application Load Balancer operate at?",
+                        options: [
+                            "Layer 3 (Network)",
+                            "Layer 4 (Transport)",
+                            "Layer 7 (Application)",
+                            "Layer 2 (Data Link)"
+                        ],
+                        correct: 2,
+                        justification: "Application Load Balancer operates at Layer 7 (Application layer) and can make routing decisions based on HTTP/HTTPS content."
+                    },
+                    {
+                        id: 94,
+                        type: "multiple-choice",
+                        question: "What OSI layer does Network Load Balancer operate at?",
+                        options: [
+                            "Layer 3 (Network)",
+                            "Layer 4 (Transport)",
+                            "Layer 7 (Application)",
+                            "Layer 2 (Data Link)"
+                        ],
+                        correct: 1,
+                        justification: "Network Load Balancer operates at Layer 4 (Transport layer) and is optimized for high performance and low latency."
+                    },
+                    {
+                        id: 95,
+                        type: "multiple-choice",
+                        question: "What is a target group in ELB?",
+                        options: [
+                            "A group of load balancers",
+                            "A logical grouping of targets that receive traffic from the load balancer",
+                            "A security group for load balancers",
+                            "A monitoring group"
+                        ],
+                        correct: 1,
+                        justification: "A target group is used to route requests to one or more registered targets (such as EC2 instances) using the protocol and port number you specify."
+                    },
+                    {
+                        id: 96,
+                        type: "multiple-choice",
+                        question: "What health check capabilities do load balancers provide?",
+                        options: [
+                            "No health checking",
+                            "Automatic detection and routing away from unhealthy targets",
+                            "Only manual health checks",
+                            "Health checks only for databases"
+                        ],
+                        correct: 1,
+                        justification: "Load balancers continuously monitor the health of targets and automatically route traffic only to healthy targets."
+                    },
+                    {
+                        id: 97,
+                        type: "multiple-choice",
+                        question: "What is SSL termination in load balancing?",
+                        options: [
+                            "Stopping SSL traffic",
+                            "Decrypting SSL traffic at the load balancer before forwarding to targets",
+                            "Encrypting all traffic",
+                            "Monitoring SSL certificates"
+                        ],
+                        correct: 1,
+                        justification: "SSL termination means the load balancer decrypts HTTPS traffic and forwards HTTP traffic to targets, offloading the encryption/decryption overhead."
+                    },
+                    {
+                        id: 98,
+                        type: "multiple-choice",
+                        question: "What is sticky sessions (session affinity)?",
+                        options: [
+                            "Sessions that never expire",
+                            "Routing requests from the same client to the same target",
+                            "Encrypted sessions",
+                            "Sessions stored in databases"
+                        ],
+                        correct: 1,
+                        justification: "Sticky sessions ensure that requests from the same client are always routed to the same target, useful for applications that store session state locally."
+                    },
+                    {
+                        id: 99,
+                        type: "multiple-choice",
+                        question: "What is cross-zone load balancing?",
+                        options: [
+                            "Load balancing across regions",
+                            "Distributing traffic evenly across all targets in all enabled AZs",
+                            "Load balancing between VPCs",
+                            "Balancing between different instance types"
+                        ],
+                        correct: 1,
+                        justification: "Cross-zone load balancing distributes traffic evenly across all registered targets in all enabled Availability Zones."
+                    },
+                    {
+                        id: 100,
+                        type: "multiple-choice",
+                        question: "What algorithms do load balancers use for traffic distribution?",
+                        options: [
+                            "Only round-robin",
+                            "Round robin, least outstanding requests, flow hash",
+                            "Only random selection",
+                            "Only weighted algorithms"
+                        ],
+                        correct: 1,
+                        justification: "Load balancers use various algorithms including round robin, least outstanding requests, and flow hash (for Network Load Balancer) to distribute traffic efficiently."
+                    }
+                ]
+            }
         ];
         let currentSectionIndex = 0;
         let currentQuestionIndex = 0;
