@@ -362,6 +362,200 @@
                 margin: 0;
             }
         }
+        
+        /* Results Styles */
+        .results-container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .score-summary {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 10px;
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .score-circle.pass {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+        }
+        
+        .score-circle.fail {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+        }
+        
+        .score-number {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        
+        .score-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .score-details {
+            flex: 1;
+        }
+        
+        .score-details p {
+            margin: 10px 0;
+            font-size: 18px;
+        }
+        
+        .pass-info {
+            color: #7f8c8d;
+            font-size: 14px !important;
+        }
+        
+        .section-breakdown {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .section-score {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .section-score:last-child {
+            border-bottom: none;
+        }
+        
+        .section-name {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .section-result {
+            font-weight: 500;
+            color: #34495e;
+        }
+        
+        .detailed-results {
+            margin-top: 30px;
+        }
+        
+        .result-item {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+        
+        .result-item.correct {
+            border-left: 4px solid #27ae60;
+        }
+        
+        .result-item.incorrect {
+            border-left: 4px solid #e74c3c;
+        }
+        
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .question-num {
+            background: #3498db;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .section-name {
+            background: #95a5a6;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .result-status {
+            margin-left: auto;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .result-item.correct .result-status {
+            color: #27ae60;
+        }
+        
+        .result-item.incorrect .result-status {
+            color: #e74c3c;
+        }
+        
+        .result-question {
+            padding: 15px 20px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .result-answers {
+            padding: 0 20px;
+        }
+        
+        .answer-row {
+            margin: 10px 0;
+        }
+        
+        .correct-answer {
+            color: #27ae60;
+            font-weight: 500;
+        }
+        
+        .wrong-answer {
+            color: #e74c3c;
+            font-weight: 500;
+        }
+        
+        .result-justification {
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-top: 1px solid #dee2e6;
+            color: #5a6c7d;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #dee2e6;
+        }
     </style>
 </head>
 <body>
@@ -395,9 +589,9 @@
         </div>
         <div id="questionsContainer"></div>
         <div class="navigation">
-            <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" disabled>Previous</button>
-            <button class="btn" id="nextBtn" onclick="nextQuestion()">Next</button>
-            <button class="btn" id="submitBtn" onclick="submitQuiz()" style="display: none;">Submit Assessment</button>
+            <button class="btn btn-secondary" id="prevButton" onclick="previousQuestion()" disabled>Previous</button>
+            <button class="btn" id="nextButton" onclick="nextQuestion()">Next</button>
+            <button class="btn" id="submitButton" onclick="submitQuiz()" style="display: none;">Submit Assessment</button>
         </div>
         <div class="score-page" id="scorePage">
             <h1>Assessment Complete!</h1>
@@ -1829,31 +2023,287 @@
         }
 
         function renderCurrentQuestion() {
-            // ...existing rendering logic...
+            const container = document.getElementById('questionsContainer');
+            container.innerHTML = '';
+
+            const currentSection = quizData[currentSectionIndex];
+            const currentQuestion = currentSection.questions[currentQuestionIndex];
+
+            // Section header
+            const sectionHeader = document.createElement('div');
+            sectionHeader.className = 'section-header';
+            sectionHeader.innerHTML = `
+                <h2>${currentSection.section}</h2>
+                <p>${currentSection.description}</p>
+            `;
+
+            // Question card
+            const questionCard = document.createElement('div');
+            questionCard.className = 'question-card active';
+
+            let html = `
+                <div class="question">
+                    <h3><span class="question-number">Question ${getAbsoluteQuestionNumber()}</span>${currentQuestion.question}</h3>
+                    ${renderQuestionInput(currentQuestion)}
+                    <div class="justification" id="justification-${currentQuestion.id}">
+                        <h4>Explanation:</h4>
+                        <p>${currentQuestion.justification}</p>
+                    </div>
+                </div>
+            `;
+
+            questionCard.innerHTML = html;
+            container.appendChild(sectionHeader);
+            container.appendChild(questionCard);
+
+            // Restore user's previous answer if any
+            restoreAnswer(currentQuestion);
+        }
+
+        function renderQuestionInput(question) {
+            return `
+                <div class="options">
+                    ${question.options.map((option, index) => `
+                        <div class="option" onclick="selectOption(${question.id}, ${index})">
+                            <input type="radio" name="q${question.id}" value="${index}" id="q${question.id}_${index}">
+                            <label for="q${question.id}_${index}">${option}</label>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function selectOption(questionId, optionIndex) {
+            const input = document.getElementById(`q${questionId}_${optionIndex}`);
+            input.checked = true;
+            
+            // Update visual selection
+            document.querySelectorAll(`input[name="q${questionId}"]`).forEach(inp => {
+                inp.closest('.option').classList.remove('selected');
+            });
+            input.closest('.option').classList.add('selected');
+
+            userAnswers[questionId] = optionIndex;
+            updateNavigation();
+        }
+
+        function restoreAnswer(question) {
+            const answer = userAnswers[question.id];
+            if (answer !== undefined) {
+                const input = document.getElementById(`q${question.id}_${answer}`);
+                if (input) {
+                    input.checked = true;
+                    input.closest('.option').classList.add('selected');
+                }
+            }
+        }
+
+        function getAbsoluteQuestionNumber() {
+            let total = 0;
+            for (let i = 0; i < currentSectionIndex; i++) {
+                total += quizData[i].questions.length;
+            }
+            return total + currentQuestionIndex + 1;
+        }
+
+        function getTotalQuestions() {
+            return quizData.reduce((total, section) => total + section.questions.length, 0);
         }
 
         function updateProgress() {
-            // ...existing progress update logic...
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            const totalQuestions = getTotalQuestions();
+            const answeredQuestions = Object.keys(userAnswers).length;
+            const progressPercentage = (answeredQuestions / totalQuestions) * 100;
+            
+            progressBar.style.width = `${progressPercentage}%`;
+            progressText.textContent = `${answeredQuestions}/${totalQuestions} Questions Answered`;
         }
 
         function updateNavigation() {
-            // ...existing navigation update logic...
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+            
+            // Update previous button
+            if (currentSectionIndex === 0 && currentQuestionIndex === 0) {
+                prevButton.disabled = true;
+                prevButton.style.opacity = '0.5';
+            } else {
+                prevButton.disabled = false;
+                prevButton.style.opacity = '1';
+            }
+            
+            // Update next button
+            const isLastSection = currentSectionIndex === quizData.length - 1;
+            const isLastQuestion = currentQuestionIndex === quizData[currentSectionIndex].questions.length - 1;
+            
+            if (isLastSection && isLastQuestion) {
+                nextButton.style.display = 'none';
+                document.getElementById('submitButton').style.display = 'inline-block';
+            } else {
+                nextButton.style.display = 'inline-block';
+                document.getElementById('submitButton').style.display = 'none';
+            }
+            
+            updateProgress();
         }
 
         function nextQuestion() {
-            // ...existing next question logic...
+            const currentSection = quizData[currentSectionIndex];
+            
+            if (currentQuestionIndex < currentSection.questions.length - 1) {
+                currentQuestionIndex++;
+            } else {
+                if (currentSectionIndex < quizData.length - 1) {
+                    currentSectionIndex++;
+                    currentQuestionIndex = 0;
+                }
+            }
+            
+            renderCurrentQuestion();
+            updateNavigation();
         }
 
         function previousQuestion() {
-            // ...existing previous question logic...
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+            } else {
+                if (currentSectionIndex > 0) {
+                    currentSectionIndex--;
+                    currentQuestionIndex = quizData[currentSectionIndex].questions.length - 1;
+                }
+            }
+            
+            renderCurrentQuestion();
+            updateNavigation();
         }
 
         function submitQuiz() {
-            // ...existing submit quiz logic...
+            clearInterval(timerInterval);
+            
+            let correctAnswers = 0;
+            const totalQuestions = getTotalQuestions();
+            const results = [];
+            
+            quizData.forEach((section, sectionIndex) => {
+                section.questions.forEach((question, questionIndex) => {
+                    const userAnswer = userAnswers[question.id];
+                    const isCorrect = userAnswer === question.correct;
+                    
+                    if (isCorrect) {
+                        correctAnswers++;
+                    }
+                    
+                    results.push({
+                        section: section.section,
+                        questionNumber: getAbsoluteQuestionNumberForIndex(sectionIndex, questionIndex),
+                        question: question.question,
+                        userAnswer: userAnswer !== undefined ? question.options[userAnswer] : 'Not answered',
+                        correctAnswer: question.options[question.correct],
+                        isCorrect: isCorrect,
+                        justification: question.justification
+                    });
+                });
+            });
+            
+            const score = (correctAnswers / totalQuestions * 100).toFixed(1);
+            showResults(score, correctAnswers, totalQuestions, results);
+        }
+
+        function getAbsoluteQuestionNumberForIndex(sectionIndex, questionIndex) {
+            let total = 0;
+            for (let i = 0; i < sectionIndex; i++) {
+                total += quizData[i].questions.length;
+            }
+            return total + questionIndex + 1;
+        }
+
+        function showResults(score, correct, total, results) {
+            const quizContainer = document.querySelector('.quiz-container');
+            quizContainer.innerHTML = `
+                <div class="results-container">
+                    <h1>Quiz Results</h1>
+                    <div class="score-summary">
+                        <div class="score-circle ${score >= 70 ? 'pass' : 'fail'}">
+                            <span class="score-number">${score}%</span>
+                            <span class="score-label">${score >= 70 ? 'PASS' : 'FAIL'}</span>
+                        </div>
+                        <div class="score-details">
+                            <p><strong>${correct}</strong> out of <strong>${total}</strong> questions correct</p>
+                            <p class="pass-info">Passing score: 70%</p>
+                        </div>
+                    </div>
+                    
+                    <div class="section-breakdown">
+                        <h3>Section Breakdown</h3>
+                        ${generateSectionBreakdown(results)}
+                    </div>
+                    
+                    <div class="detailed-results">
+                        <h3>Detailed Results</h3>
+                        ${results.map(result => `
+                            <div class="result-item ${result.isCorrect ? 'correct' : 'incorrect'}">
+                                <div class="result-header">
+                                    <span class="question-num">Q${result.questionNumber}</span>
+                                    <span class="section-name">${result.section}</span>
+                                    <span class="result-status">${result.isCorrect ? '✓' : '✗'}</span>
+                                </div>
+                                <div class="result-question">${result.question}</div>
+                                <div class="result-answers">
+                                    <div class="answer-row">
+                                        <strong>Your answer:</strong> 
+                                        <span class="${result.isCorrect ? 'correct-answer' : 'wrong-answer'}">${result.userAnswer}</span>
+                                    </div>
+                                    ${!result.isCorrect ? `
+                                        <div class="answer-row">
+                                            <strong>Correct answer:</strong> 
+                                            <span class="correct-answer">${result.correctAnswer}</span>
+                                        </div>
+                                    ` : ''}
+                                </div>
+                                <div class="result-justification">
+                                    <strong>Explanation:</strong> ${result.justification}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button onclick="restartQuiz()" class="button secondary">Restart Quiz</button>
+                        <button onclick="window.location.href='index.html'" class="button primary">Back to Menu</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateSectionBreakdown(results) {
+            const sections = {};
+            
+            results.forEach(result => {
+                if (!sections[result.section]) {
+                    sections[result.section] = { correct: 0, total: 0 };
+                }
+                sections[result.section].total++;
+                if (result.isCorrect) {
+                    sections[result.section].correct++;
+                }
+            });
+            
+            return Object.entries(sections).map(([section, data]) => {
+                const percentage = ((data.correct / data.total) * 100).toFixed(1);
+                return `
+                    <div class="section-score">
+                        <span class="section-name">${section}</span>
+                        <span class="section-result">${data.correct}/${data.total} (${percentage}%)</span>
+                    </div>
+                `;
+            }).join('');
         }
 
         function restartQuiz() {
-            // ...existing restart quiz logic...
+            location.reload();
         }
 
         // Initialize the quiz on page load
