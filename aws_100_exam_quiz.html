@@ -556,6 +556,55 @@
             padding-top: 20px;
             border-top: 2px solid #dee2e6;
         }
+        
+        .attempts-badge {
+            background: #ffc107;
+            color: #000;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+        
+        .review-recommendations {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .review-recommendations h3 {
+            color: #856404;
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        
+        .review-recommendations p {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .missed-topics-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .missed-topics-list li {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 8px 12px;
+            margin: 5px 0;
+            color: #495057;
+        }
+        
+        .missed-topics-list li:before {
+            content: "📚 ";
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -1975,6 +2024,8 @@
         let currentSectionIndex = 0;
         let currentQuestionIndex = 0;
         let userAnswers = {};
+        let firstAttempts = {}; // Track first attempts for scoring
+        let questionAttempts = {}; // Track number of attempts per question
         let sectionScores = {};
         let showingJustification = false;
         let timeLeft = 180 * 60; // 180 minutes in seconds
@@ -2074,6 +2125,8 @@
         }
 
         function selectOption(questionId, optionIndex) {
+            if (showingJustification) return; // Don't allow selection during justification
+            
             const input = document.getElementById(`q${questionId}_${optionIndex}`);
             input.checked = true;
             
@@ -2083,8 +2136,28 @@
             });
             input.closest('.option').classList.add('selected');
 
+            // Track attempts
+            if (!questionAttempts[questionId]) {
+                questionAttempts[questionId] = 0;
+                firstAttempts[questionId] = optionIndex; // Store first attempt for scoring
+            }
+            questionAttempts[questionId]++;
+            
             userAnswers[questionId] = optionIndex;
-            updateNavigation();
+            
+            // Check if answer is correct
+            const currentQuestion = quizData[currentSectionIndex].questions[currentQuestionIndex];
+            if (optionIndex === currentQuestion.correct) {
+                // Correct answer - show justification and enable next
+                setTimeout(() => {
+                    showJustification();
+                    showingJustification = true;
+                    updateNavigation();
+                }, 500);
+            } else {
+                // Wrong answer - show immediate feedback but allow retry
+                showIncorrectFeedback(questionId, optionIndex);
+            }
         }
 
         function restoreAnswer(question) {
@@ -2096,6 +2169,33 @@
                     input.closest('.option').classList.add('selected');
                 }
             }
+        }
+        
+        function showIncorrectFeedback(questionId, selectedIndex) {
+            const selectedOption = document.getElementById(`q${questionId}_${selectedIndex}`).closest('.option');
+            selectedOption.classList.add('incorrect');
+            
+            // Remove the incorrect marking after 1 second to allow retry
+            setTimeout(() => {
+                selectedOption.classList.remove('incorrect', 'selected');
+                document.getElementById(`q${questionId}_${selectedIndex}`).checked = false;
+            }, 1000);
+        }
+        
+        function showJustification() {
+            const currentQuestion = quizData[currentSectionIndex].questions[currentQuestionIndex];
+            const justificationElement = document.getElementById(`justification-${currentQuestion.id}`);
+            justificationElement.classList.add('show');
+            
+            // Highlight correct answer
+            document.querySelectorAll(`input[name="q${currentQuestion.id}"]`).forEach((input, index) => {
+                const option = input.closest('.option');
+                if (index === currentQuestion.correct) {
+                    option.classList.add('correct');
+                } else if (input.checked) {
+                    option.classList.add('selected'); // Keep user's correct selection highlighted
+                }
+            });
         }
 
         function getAbsoluteQuestionNumber() {
@@ -2140,17 +2240,37 @@
             const isLastQuestion = currentQuestionIndex === quizData[currentSectionIndex].questions.length - 1;
             
             if (isLastSection && isLastQuestion) {
-                nextButton.style.display = 'none';
-                document.getElementById('submitButton').style.display = 'inline-block';
+                if (showingJustification) {
+                    nextButton.style.display = 'none';
+                    document.getElementById('submitButton').style.display = 'inline-block';
+                } else {
+                    nextButton.style.display = 'none';
+                    document.getElementById('submitButton').style.display = 'none';
+                }
             } else {
                 nextButton.style.display = 'inline-block';
                 document.getElementById('submitButton').style.display = 'none';
+                nextButton.textContent = showingJustification ? 'Continue' : 'Next';
+                nextButton.disabled = !showingJustification;
+                nextButton.style.opacity = showingJustification ? '1' : '0.5';
             }
             
             updateProgress();
         }
 
         function nextQuestion() {
+            if (!showingJustification) {
+                // User pressed next without answering correctly
+                // Show message to select correct answer first
+                alert('Please select the correct answer to continue.');
+                return;
+            }
+            
+            // Advance to next question
+            advanceToNextQuestion();
+        }
+        
+        function advanceToNextQuestion() {
             const currentSection = quizData[currentSectionIndex];
             
             if (currentQuestionIndex < currentSection.questions.length - 1) {
@@ -2162,6 +2282,7 @@
                 }
             }
             
+            showingJustification = false;
             renderCurrentQuestion();
             updateNavigation();
         }
@@ -2176,6 +2297,7 @@
                 }
             }
             
+            showingJustification = false;
             renderCurrentQuestion();
             updateNavigation();
         }
@@ -2186,30 +2308,52 @@
             let correctAnswers = 0;
             const totalQuestions = getTotalQuestions();
             const results = [];
+            const missedTopics = [];
             
             quizData.forEach((section, sectionIndex) => {
+                let sectionCorrect = 0;
+                let sectionTotal = section.questions.length;
+                
                 section.questions.forEach((question, questionIndex) => {
-                    const userAnswer = userAnswers[question.id];
-                    const isCorrect = userAnswer === question.correct;
+                    const firstAttempt = firstAttempts[question.id];
+                    const finalAnswer = userAnswers[question.id];
+                    const isFirstAttemptCorrect = firstAttempt === question.correct;
+                    const isFinalAnswerCorrect = finalAnswer === question.correct;
                     
-                    if (isCorrect) {
+                    // Only count first attempts for scoring
+                    if (isFirstAttemptCorrect) {
                         correctAnswers++;
+                        sectionCorrect++;
+                    } else {
+                        // Add to missed topics for review
+                        if (!missedTopics.includes(section.section)) {
+                            missedTopics.push(section.section);
+                        }
                     }
                     
                     results.push({
                         section: section.section,
                         questionNumber: getAbsoluteQuestionNumberForIndex(sectionIndex, questionIndex),
                         question: question.question,
-                        userAnswer: userAnswer !== undefined ? question.options[userAnswer] : 'Not answered',
+                        userFirstAttempt: firstAttempt !== undefined ? question.options[firstAttempt] : 'Not answered',
+                        userFinalAnswer: finalAnswer !== undefined ? question.options[finalAnswer] : 'Not answered',
                         correctAnswer: question.options[question.correct],
-                        isCorrect: isCorrect,
+                        isFirstAttemptCorrect: isFirstAttemptCorrect,
+                        isFinalAnswerCorrect: isFinalAnswerCorrect,
+                        attempts: questionAttempts[question.id] || 0,
                         justification: question.justification
                     });
                 });
+                
+                sectionScores[section.section] = {
+                    correct: sectionCorrect,
+                    total: sectionTotal,
+                    percentage: ((sectionCorrect / sectionTotal) * 100).toFixed(1)
+                };
             });
             
             const score = (correctAnswers / totalQuestions * 100).toFixed(1);
-            showResults(score, correctAnswers, totalQuestions, results);
+            showResults(score, correctAnswers, totalQuestions, results, missedTopics);
         }
 
         function getAbsoluteQuestionNumberForIndex(sectionIndex, questionIndex) {
@@ -2220,19 +2364,24 @@
             return total + questionIndex + 1;
         }
 
-        function showResults(score, correct, total, results) {
-            const quizContainer = document.querySelector('.quiz-container');
+        function showResults(score, correct, total, results, missedTopics) {
+            const quizContainer = document.querySelector('.container');
+            const firstAttemptScore = Math.round((Object.values(firstAttempts).filter(correct => correct).length / total) * 100);
+            const totalAttempts = Object.values(questionAttempts).reduce((sum, attempts) => sum + attempts, 0);
+            
             quizContainer.innerHTML = `
                 <div class="results-container">
                     <h1>Quiz Results</h1>
                     <div class="score-summary">
-                        <div class="score-circle ${score >= 70 ? 'pass' : 'fail'}">
-                            <span class="score-number">${score}%</span>
-                            <span class="score-label">${score >= 70 ? 'PASS' : 'FAIL'}</span>
+                        <div class="score-circle ${firstAttemptScore >= 70 ? 'pass' : 'fail'}">
+                            <span class="score-number">${firstAttemptScore}%</span>
+                            <span class="score-label">${firstAttemptScore >= 70 ? 'PASS' : 'FAIL'}</span>
                         </div>
                         <div class="score-details">
-                            <p><strong>${correct}</strong> out of <strong>${total}</strong> questions correct</p>
-                            <p class="pass-info">Passing score: 70%</p>
+                            <p><strong>First Attempt Score:</strong> ${Object.values(firstAttempts).filter(correct => correct).length} out of ${total} correct (${firstAttemptScore}%)</p>
+                            <p><strong>Final Score:</strong> ${correct} out of ${total} correct (${score}%)</p>
+                            <p><strong>Total Attempts:</strong> ${totalAttempts}</p>
+                            <p class="pass-info">Passing score: 70% (based on first attempts)</p>
                         </div>
                     </div>
                     
@@ -2240,6 +2389,16 @@
                         <h3>Section Breakdown</h3>
                         ${generateSectionBreakdown(results)}
                     </div>
+                    
+                    ${missedTopics && missedTopics.length > 0 ? `
+                    <div class="review-recommendations">
+                        <h3>Areas for Review</h3>
+                        <p>Based on your first attempts, consider reviewing these topics:</p>
+                        <ul class="missed-topics-list">
+                            ${missedTopics.map(topic => `<li>${topic}</li>`).join('')}
+                        </ul>
+                    </div>
+                    ` : ''}
                     
                     <div class="detailed-results">
                         <h3>Detailed Results</h3>
@@ -2249,17 +2408,28 @@
                                     <span class="question-num">Q${result.questionNumber}</span>
                                     <span class="section-name">${result.section}</span>
                                     <span class="result-status">${result.isCorrect ? '✓' : '✗'}</span>
+                                    ${questionAttempts[result.questionNumber] > 1 ? `
+                                        <span class="attempts-badge">${questionAttempts[result.questionNumber]} attempts</span>
+                                    ` : ''}
                                 </div>
                                 <div class="result-question">${result.question}</div>
                                 <div class="result-answers">
                                     <div class="answer-row">
-                                        <strong>Your answer:</strong> 
+                                        <strong>Your final answer:</strong> 
                                         <span class="${result.isCorrect ? 'correct-answer' : 'wrong-answer'}">${result.userAnswer}</span>
                                     </div>
                                     ${!result.isCorrect ? `
                                         <div class="answer-row">
                                             <strong>Correct answer:</strong> 
                                             <span class="correct-answer">${result.correctAnswer}</span>
+                                        </div>
+                                    ` : ''}
+                                    ${questionAttempts[result.questionNumber] > 1 ? `
+                                        <div class="answer-row">
+                                            <strong>First attempt:</strong> 
+                                            <span class="${firstAttempts[result.questionNumber] ? 'correct-answer' : 'wrong-answer'}">
+                                                ${firstAttempts[result.questionNumber] ? 'Correct' : 'Incorrect'}
+                                            </span>
                                         </div>
                                     ` : ''}
                                 </div>
@@ -2271,8 +2441,8 @@
                     </div>
                     
                     <div class="action-buttons">
-                        <button onclick="restartQuiz()" class="button secondary">Restart Quiz</button>
-                        <button onclick="window.location.href='index.html'" class="button primary">Back to Menu</button>
+                        <button onclick="restartQuiz()" class="btn btn-secondary">Restart Quiz</button>
+                        <button onclick="window.location.href='index.html'" class="btn">Back to Menu</button>
                     </div>
                 </div>
             `;
